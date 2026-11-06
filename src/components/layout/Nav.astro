@@ -1,0 +1,234 @@
+---
+interface NavLink {
+  label: string
+  href: string
+  openInNewTab?: boolean
+}
+
+interface CtaButton {
+  label: string
+  href: string
+  variant: string
+  openInNewTab?: boolean
+}
+
+interface Props {
+  nav: {
+    logo?: { asset?: { url: string } }
+    logoAlt?: string
+    links?: NavLink[]
+    ctaButton?: CtaButton
+  }
+}
+
+const { nav } = Astro.props
+const currentPath = Astro.url.pathname
+---
+
+<header class="nav-header">
+  <div class="container nav-inner">
+
+    <!-- Logo -->
+    <a href="/" class="nav-logo" aria-label="Home">
+      {nav?.logo?.asset?.url
+        ? <img src={nav.logo.asset.url} alt={nav?.logoAlt ?? 'Logo'} width="140" height="40" />
+        : <span class="nav-logo-text">Logo</span>
+      }
+    </a>
+
+    <!-- Desktop Links -->
+    <nav class="nav-links" aria-label="Main navigation">
+      {nav?.links?.map((link) => (
+        <a
+          href={link.href}
+          class={`nav-link ${currentPath === link.href ? 'nav-link--active' : ''}`}
+          target={link.openInNewTab ? '_blank' : undefined}
+          rel={link.openInNewTab ? 'noopener noreferrer' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- CTA + Mobile toggle -->
+    <div class="nav-actions">
+      {nav?.ctaButton && (
+        <a
+          href={nav.ctaButton.href}
+          class="btn btn--primary"
+          target={nav.ctaButton.openInNewTab ? '_blank' : undefined}
+          rel={nav.ctaButton.openInNewTab ? 'noopener noreferrer' : undefined}
+        >
+          {nav.ctaButton.label}
+        </a>
+      )}
+
+      <button
+        class="nav-mobile-toggle"
+        id="mobile-menu-toggle"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Toggle menu"
+      >
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <nav aria-label="Mobile navigation">
+      {nav?.links?.map((link) => (
+        <a
+          href={link.href}
+          class="mobile-link"
+          target={link.openInNewTab ? '_blank' : undefined}
+          rel={link.openInNewTab ? 'noopener noreferrer' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+      {nav?.ctaButton && (
+        <a href={nav.ctaButton.href} class="btn btn--primary mobile-cta">
+          {nav.ctaButton.label}
+        </a>
+      )}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+    gap: 2rem;
+  }
+
+  .nav-logo img { height: 2.25rem; width: auto; }
+  .nav-logo-text { font-weight: 700; font-size: 1.25rem; color: var(--color-text); }
+
+  .nav-links {
+    display: none;
+    gap: 0.25rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .nav-link:hover,
+  .nav-link--active {
+    color: var(--color-text);
+    background: var(--color-bg-muted);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Hamburger */
+  .nav-mobile-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    padding: 1rem;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .mobile-menu nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-link {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .mobile-link:hover { color: var(--color-text); background: var(--color-bg-muted); }
+  .mobile-cta { margin-top: 0.5rem; text-align: center; }
+
+  /* Desktop breakpoint */
+  @media (min-width: 768px) {
+    .nav-links { display: flex; }
+    .nav-mobile-toggle { display: none; }
+  }
+
+  /* Shared button styles — referenced globally */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .btn--primary {
+    background: var(--color-brand);
+    color: #fff;
+  }
+
+  .btn--primary:hover { background: var(--color-brand-hover); }
+</style>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle')
+  const menu   = document.getElementById('mobile-menu')
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.style.display === 'block'
+    if (menu) menu.style.display = isOpen ? 'none' : 'block'
+    toggle.setAttribute('aria-expanded', String(!isOpen))
+    menu?.setAttribute('aria-hidden', String(isOpen))
+  })
+</script>

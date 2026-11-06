@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro'
+import PortableText from '@components/ui/PortableText'
+import { getClient } from '@cms/client'
+import { pageBySlugQuery } from '@cms/queries'
+
+const { slug } = Astro.params
+
+// Don't let the catch-all handle API routes
+if (slug?.startsWith('api/')) {
+  return new Response('Not Found', { status: 404 })
+}
+
+const isPreview = Astro.cookies.has('sanity-preview-secret')
+const client    = getClient(isPreview)
+
+const page = await client.fetch(pageBySlugQuery, { slug })
+
+// 404 if no page found in Sanity
+if (!page) {
+  return Astro.redirect('/404')
+}
+---
+
+<BaseLayout
+  title={page.seo?.metaTitle ?? page.title}
+  description={page.seo?.metaDescription}
+  ogImage={page.seo?.ogImage?.asset?.url}
+  noIndex={page.seo?.noIndex}
+>
+
+  <!-- Page Hero -->
+  {(page.heroHeadline || page.heroSubheadline) && (
+    <section class="page-hero section">
+      <div class="container page-hero-inner">
+        {page.heroHeadline    && <h1 class="page-hero-headline">{page.heroHeadline}</h1>}
+        {page.heroSubheadline && <p  class="page-hero-sub">{page.heroSubheadline}</p>}
+      </div>
+    </section>
+  )}
+
+  <!-- Page Body -->
+  {page.body && (
+    <section class="page-body section">
+      <div class="container page-body-inner">
+        <PortableText value={page.body} client:load />
+      </div>
+    </section>
+  )}
+
+</BaseLayout>
+
+<style>
+  .page-hero {
+    background: var(--color-bg-muted);
+    padding-block: 4rem;
+  }
+
+  .page-hero-inner { max-width: 64ch; }
+
+  .page-hero-headline {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .page-hero-sub {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .page-body-inner {
+    max-width: 72ch;
+  }
+</style>

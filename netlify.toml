@@ -1,0 +1,25 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# ─── Security Headers ───────────────────────────────────────────────────────
+# IMPORTANT: The Content-Security-Policy frame-ancestors directive is what
+# allows Sanity Studio to embed this site in an iframe for visual editing.
+# Without this, you'll get the "Refused to display in a frame" error.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "frame-ancestors 'self' https://*.sanity.studio https://sanity.studio"
+
+# ─── Netlify Functions (SSR) ─────────────────────────────────────────────────
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

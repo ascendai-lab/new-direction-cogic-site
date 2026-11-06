@@ -1,0 +1,35 @@
+{
+  "name": "ascend-ai-starter",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Ascend AI Marketing — Astro 5 + Tailwind 4 + Sanity CMS starter template",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sanity": "sanity dev",
+    "sanity:deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^6.3.0",
+    "@astrojs/react": "^4.2.0",
+    "@portabletext/react": "^3.2.0",
+    "@sanity/astro": "^3.0.0",
+    "@sanity/icons": "^3.5.0",
+    "@sanity/image-url": "^1.1.0",
+    "astro": "^5.6.0",
+    "lucide-react": "^0.469.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sanity": "^3.75.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@sanity/vision": "^3.75.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,0 +1,128 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro'
+import Hero from '@components/sections/Hero.astro'
+import Services from '@components/sections/Services.astro'
+import CTABanner from '@components/sections/CTABanner.astro'
+import PortableText from '@components/ui/PortableText'
+import ContactForm from '@components/ui/ContactForm'
+import { getClient } from '@cms/client'
+import { homePageQuery } from '@cms/queries'
+
+// Detect preview mode (set by Sanity Presentation Tool)
+const isPreview = Astro.cookies.has('sanity-preview-secret')
+const client    = getClient(isPreview)
+
+const page = await client.fetch(homePageQuery)
+---
+
+<BaseLayout
+  title={page?.seo?.metaTitle}
+  description={page?.seo?.metaDescription}
+  ogImage={page?.seo?.ogImage?.asset?.url}
+  noIndex={page?.seo?.noIndex}
+>
+
+  <!-- Hero -->
+  <Hero
+    headline={page?.heroHeadline ?? 'Welcome'}
+    subheadline={page?.heroSubheadline}
+    image={page?.heroImage}
+    primaryCta={page?.heroCta}
+    secondaryCta={page?.heroSecondaryCta}
+  />
+
+  <!-- Services -->
+  <Services
+    heading={page?.servicesHeading}
+    subheading={page?.servicesSubheading}
+    services={page?.services}
+  />
+
+  <!-- About / Trust Section -->
+  {(page?.aboutHeading || page?.aboutBody) && (
+    <section class="about section">
+      <div class="container about-inner">
+        <div class="about-content">
+          {page?.aboutHeading && <h2 class="about-heading">{page.aboutHeading}</h2>}
+          {page?.aboutBody && (
+            <PortableText value={page.aboutBody} client:load />
+          )}
+        </div>
+
+        {page?.trustIndicators?.length > 0 && (
+          <div class="trust-grid">
+            {page.trustIndicators.map((item: any) => (
+              <div class="trust-item">
+                <span class="trust-value">{item.value}</span>
+                <span class="trust-label">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  <!-- Contact Form -->
+  <ContactForm client:load />
+
+  <!-- Bottom CTA Banner -->
+  <CTABanner
+    heading={page?.ctaHeading}
+    body={page?.ctaBody}
+    button={page?.ctaButton}
+  />
+
+</BaseLayout>
+
+<style>
+  .about { background: var(--color-bg); }
+
+  .about-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .about-inner { grid-template-columns: 3fr 2fr; }
+  }
+
+  .about-heading {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 1.25rem;
+  }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .trust-item {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius-xl);
+    background: var(--color-bg-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  .trust-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-brand);
+    line-height: 1;
+  }
+
+  .trust-label {
+    display: block;
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+</style>
