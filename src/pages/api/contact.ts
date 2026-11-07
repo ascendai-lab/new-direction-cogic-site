@@ -75,9 +75,12 @@ export const POST: APIRoute = async ({ request, site }) => {
       console.log('[contact] No webhook set. Submission type:', payload.source)
     } else {
       // ponytail: until this client's n8n webhook exists, Netlify Forms stores submissions and emails the church.
+      // FORMS_ENDPOINT points at the old Netlify project, whose existing alert emails Paul. New alerts there
+      // are limited to Netlify team members, so the old project stays up as the form inbox.
       const form = new URLSearchParams({ 'form-name': kind })
       for (const [key, value] of Object.entries(fields)) form.set(key, String(value ?? ''))
-      const res = await fetch(new URL('/__forms.html', request.url), {
+      const formsUrl = process.env.FORMS_ENDPOINT || new URL('/__forms.html', request.url).href
+      const res = await fetch(formsUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: form.toString(),
