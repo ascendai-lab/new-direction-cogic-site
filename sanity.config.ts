@@ -63,7 +63,7 @@ export default defineConfig({
   name: 'default',
 
   // ── REPLACE THESE per client ─────────────────────────────────
-  title: 'Client Site Name',
+  title: 'New Direction C.O.G.I.C',
   projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
   dataset: import.meta.env.PUBLIC_SANITY_DATASET ?? 'production',
   // ─────────────────────────────────────────────────────────────
@@ -72,7 +72,7 @@ export default defineConfig({
     structureTool({ structure }),
 
     presentationTool({
-      previewUrl: import.meta.env.SITE_URL ?? 'http://localhost:4321',
+      previewUrl: '/',
       resolve: {
         locations: {
           homePage: {

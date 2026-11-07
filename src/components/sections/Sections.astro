@@ -1,0 +1,187 @@
+---
+import ChurchForm from '@components/ui/ChurchForm'
+import { emphasize, linkAttrs, paragraphs } from '@/lib/text'
+import type { Section, Settings } from '@cms/types'
+
+interface Props { sections?: Section[]; settings?: Settings }
+const { sections = [], settings } = Astro.props
+
+const band = (s: Section, extra = '') => `band band--${s.tone ?? 'white'} pad ${extra}`.trim()
+const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${settings?.locationName ?? ''} ${settings?.address ?? ''}`)}`
+const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.asset.url}?w=720&auto=format` : '/img/pastor-solid-blue.png'
+---
+
+{sections.map((s) => {
+  const id = s.anchor || undefined
+
+  if (s._type === 'textBlock') return (
+    <section class={band(s, 'statement center')} id={id}>
+      <div class="stagger">
+        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+        {s.heading && <h2 class="h2" set:html={emphasize(s.heading)} />}
+        {s.body && <div class="prose-block">{paragraphs(s.body).map((p) => <p class="lead mt5">{p}</p>)}</div>}
+        {s.button && (
+          <div class="block-actions">
+            <a class={s.tone === 'deep' ? 'btn btn--inverse' : 'btn btn--primary'} href={s.button.href} {...linkAttrs(s.button.href, s.button.openInNewTab)}>
+              {s.button.label} <span class="arw" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        )}
+        {s.textLink && (
+          <p><a class="tlink" href={s.textLink.href} {...linkAttrs(s.textLink.href)}>{s.textLink.label} <span class="arw" aria-hidden="true">&rarr;</span></a></p>
+        )}
+      </div>
+    </section>
+  )
+
+  if (s._type === 'cardGrid') return (
+    <section class={band(s, 'center')} id={id}>
+      <div class="stagger">
+        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+        {s.heading && <h2 class="h2 measure mt5" set:html={emphasize(s.heading)} />}
+      </div>
+      <div class={`cards${[2, 4].includes(s.cards?.length ?? 0) ? ' cards--two' : ''}`}>
+        {s.cards?.map((c, i) => (
+          <div class="card reveal">
+            {s.numbered !== false && <span class="num">{String(i + 1).padStart(2, '0')}</span>}
+            <h3>{c.title}</h3>
+            {c.text && <p>{c.text}</p>}
+            {c.link && <a class="tlink" href={c.link.href} {...linkAttrs(c.link.href)}>{c.link.label} <span class="arw" aria-hidden="true">&rarr;</span></a>}
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+
+  if (s._type === 'gatheringBand') {
+    const g = settings?.gatherings?.find((x) => x.key === s.gatheringKey)
+    if (!g) return null
+    return (
+      <section class="band band--deep pad" id={id}>
+        <div class="split">
+          <div class="stagger">
+            {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+            {s.heading && <h2 class="h2 mt5" set:html={emphasize(s.heading)} />}
+            {s.body && <p class="lead mt5">{s.body}</p>}
+          </div>
+          <div
+            class="detail-card reveal"
+            data-gathering
+            data-name={g.name}
+            data-next={g.nextLabel}
+            data-weekday={g.weekday}
+            data-start={g.startTime}
+            data-duration={g.durationMinutes}
+            data-details={g.calendarDetails}
+          >
+            <p class="next-date">{g.nextLabel}: {g.timeLabel}</p>
+            <div class="countdown" aria-live="off">
+              <div><b data-u="d">&ndash;</b><small>Days</small></div>
+              <div><b data-u="h">&ndash;</b><small>Hours</small></div>
+              <div><b data-u="m">&ndash;</b><small>Min</small></div>
+              <div><b data-u="s">&ndash;</b><small>Sec</small></div>
+            </div>
+            <dl style="margin:0">
+              {g.rows?.map((r) => (
+                <div class="detail-row">
+                  <dt>{r.label}</dt>
+                  <dd>
+                    {r.copy
+                      ? <button type="button" class="copy" data-copy={r.copy}>{r.value} <span class="copy-label">Copy</span></button>
+                      : r.href ? <a href={r.href} {...linkAttrs(r.href)}>{r.value}</a> : r.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <div class="card-actions">
+              {g.action && (
+                <a class="btn btn--primary" href={g.action.href} {...linkAttrs(g.action.href)}>
+                  {g.action.label} <span class="arw" aria-hidden="true">&rarr;</span>
+                </a>
+              )}
+              <a class="btn btn--outline cal-link" href="#" target="_blank" rel="noopener">Add to calendar</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (s._type === 'pastorBlock') {
+    const bio = (
+      <>
+        {paragraphs(settings?.pastorBio).map((p) => <p>{p}</p>)}
+        {settings?.pastorVerse && <blockquote>{settings.pastorVerse}<cite>{settings.pastorVerseCite}</cite></blockquote>}
+        {settings?.pastorClosing && <p>{settings.pastorClosing}</p>}
+      </>
+    )
+    return (
+      <section class={band(s)} id={id}>
+        <div class="split split--portrait" style={s.showFullBio ? 'align-items:start' : undefined}>
+          <div class="portrait reveal">
+            <img src={pastorPhoto} alt={settings?.pastorName} width="720" height="960" loading="lazy" />
+          </div>
+          <div class="stagger">
+            {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+            <h2 class="h2 mt5">{settings?.pastorName}</h2>
+            <p class="lead mt5">{settings?.pastorSummary}</p>
+            {s.showFullBio
+              ? <div class="bio bio-body bio-body--open">{bio}</div>
+              : <details class="bio"><summary>Read his full bio</summary><div class="bio-body">{bio}</div></details>}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (s._type === 'creedBlock') return (
+    <section class={band(s, 'center')} id={id}>
+      <div class="stagger">
+        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+        {s.heading && <h2 class="h2 measure mt5" set:html={emphasize(s.heading)} />}
+      </div>
+      <div class="creed">{settings?.affirmation?.map((line) => <p class="reveal">{line}</p>)}</div>
+      <p class="amen reveal">Amen.</p>
+    </section>
+  )
+
+  if (s._type === 'verseBlock') return (
+    <section class={band(s, 'center')}>
+      <div class="stagger">
+        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+        <p class="verse">&ldquo;{s.quote}&rdquo;</p>
+        <p class="verse-cite">{s.cite}</p>
+      </div>
+    </section>
+  )
+
+  if (s._type === 'mapBlock') return (
+    <section class={band(s)} id={id}>
+      <div class="split">
+        <div class="stagger">
+          {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+          {s.heading && <h2 class="h2 mt5" set:html={emphasize(s.heading)} />}
+          <p class="address">{settings?.locationName}<br />{settings?.address}</p>
+          {settings?.directions && <p class="lead mt5">{settings.directions}</p>}
+          <p class="mt5"><a class="btn btn--primary" href={mapUrl} target="_blank" rel="noopener">Get directions <span class="arw" aria-hidden="true">&rarr;</span></a></p>
+        </div>
+        <div class="map-frame reveal">
+          <iframe src={`${mapUrl}&output=embed`} title={`Map to ${settings?.locationName}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+  )
+
+  if (s._type === 'formBlock') return (
+    <section class={band(s, 'center')} id={id}>
+      <div class="stagger">
+        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
+        {s.heading && <h2 class="h2 measure mt5" set:html={emphasize(s.heading)} />}
+        {s.body && <p class="lead measure mt5">{s.body}</p>}
+      </div>
+      <ChurchForm kind={s.kind ?? 'contact'} client:visible />
+    </section>
+  )
+
+  return null
+})}

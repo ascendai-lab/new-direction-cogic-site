@@ -18,37 +18,18 @@ const ctaButtonFragment = groq`
   openInNewTab
 `
 
-const portableTextFragment = groq`
-  ...,
-  _type == 'image' => {
-    ...,
-    asset->
-  },
-  _type == 'videoEmbed' => {
-    url,
-    caption,
-    autoplay
-  }
-`
-
 /* ── Queries ──────────────────────────────────────────────────────────────── */
 
 export const homePageQuery = groq`
   *[_type == "homePage"][0] {
+    heroKicker,
     heroHeadline,
-    heroSubheadline,
-    heroImage { asset->{ url, metadata { dimensions } }, alt },
+    heroImage { asset->{ url, metadata { dimensions } } },
+    heroImageAlt,
     heroCta { ${ctaButtonFragment} },
     heroSecondaryCta { ${ctaButtonFragment} },
-    servicesHeading,
-    servicesSubheading,
-    services[] { icon, title, description },
-    aboutHeading,
-    aboutBody[] { ${portableTextFragment} },
-    trustIndicators[] { value, label },
-    ctaHeading,
-    ctaBody,
-    ctaButton { ${ctaButtonFragment} },
+    ribbon,
+    sections,
     ${seoFragment}
   }
 `
@@ -58,7 +39,9 @@ export const navQuery = groq`
     logo { asset->{ url } },
     logoAlt,
     links[] { label, href, openInNewTab },
-    ctaButton { ${ctaButtonFragment} }
+    ctaButton { ${ctaButtonFragment} },
+    secondaryButton { ${ctaButtonFragment} },
+    mobileButton { ${ctaButtonFragment} }
   }
 `
 
@@ -77,7 +60,19 @@ export const siteSettingsQuery = groq`
     footerTagline,
     copyrightName,
     googleAnalyticsId,
-    defaultSeo { ${seoFragment} }
+    donateUrl,
+    locationName,
+    directions,
+    gatherings,
+    pastorName,
+    pastorPhoto { asset->{ url } },
+    pastorSummary,
+    pastorBio,
+    pastorVerse,
+    pastorVerseCite,
+    pastorClosing,
+    affirmation,
+    defaultSeo { metaTitle, metaDescription, ogImage { asset->{ url } } }
   }
 `
 
@@ -85,9 +80,10 @@ export const pageBySlugQuery = groq`
   *[_type == "page" && slug.current == $slug][0] {
     title,
     "slug": slug.current,
+    heroKicker,
     heroHeadline,
     heroSubheadline,
-    body[] { ${portableTextFragment} },
+    sections,
     ${seoFragment}
   }
 `

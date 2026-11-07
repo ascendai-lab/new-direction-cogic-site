@@ -4,6 +4,7 @@ import Nav from '@components/layout/Nav.astro'
 import Footer from '@components/layout/Footer.astro'
 import { getClient } from '@cms/client'
 import { navQuery, siteSettingsQuery } from '@cms/queries'
+import type { Settings } from '@cms/types'
 
 interface Props {
   title?: string
@@ -14,56 +15,65 @@ interface Props {
 
 const { title, description, ogImage, noIndex = false } = Astro.props
 
-// Detect if we're in Sanity preview / visual editing mode
 const isPreview = Astro.cookies.has('sanity-preview-secret')
 const client = getClient(isPreview)
 
 const [nav, settings] = await Promise.all([
   client.fetch(navQuery),
-  client.fetch(siteSettingsQuery),
+  client.fetch<Settings>(siteSettingsQuery),
 ])
 
-const siteTitle = settings?.siteName ?? 'Site'
-const pageTitle  = title ? `${title} | ${siteTitle}` : siteTitle
-const pageDesc   = description ?? settings?.defaultSeo?.metaDescription ?? ''
-const pageImage  = ogImage ?? settings?.defaultSeo?.ogImage?.asset?.url ?? ''
-const gaId       = settings?.googleAnalyticsId
+const siteTitle = settings?.siteName ?? 'New Direction C.O.G.I.C'
+const pageTitle = title ? `${title} | ${siteTitle}` : siteTitle
+const pageDesc = description ?? settings?.defaultSeo?.metaDescription ?? ''
+const pageImage = ogImage ?? settings?.defaultSeo?.ogImage?.asset?.url ?? new URL('/img/share.jpg', Astro.url).href
+const gaId = settings?.googleAnalyticsId
+// ponytail: stays hidden from search until ALLOW_INDEXING=true is set at launch, so previews never get indexed.
+const hideFromSearch = noIndex || import.meta.env.ALLOW_INDEXING !== 'true'
+
+// Address is left out on purpose: they rent for now and have no Google listing until they own a building.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Church',
+  name: siteTitle,
+  alternateName: 'New Direction Church of God in Christ',
+  description: pageDesc,
+  url: Astro.site?.href,
+  email: settings?.email,
+  employee: { '@type': 'Person', name: settings?.pastorName, jobTitle: 'Pastor' },
+}
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-    <!-- Primary Meta -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    {pageDesc   && <meta name="description" content={pageDesc} />}
-    {noIndex    && <meta name="robots" content="noindex, nofollow" />}
+    {pageDesc && <meta name="description" content={pageDesc} />}
+    {hideFromSearch && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#0d2645" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url).href} />
 
-    <!-- Open Graph -->
-    <meta property="og:title"       content={pageTitle} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
-    <meta property="og:type"        content="website" />
-    <meta property="og:url"         content={Astro.url.href} />
-    {pageImage  && <meta property="og:image" content={pageImage} />}
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:image" content={pageImage} />
+    <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:title"       content={pageTitle} />
-    <meta name="twitter:description" content={pageDesc} />
-    {pageImage  && <meta name="twitter:image" content={pageImage} />}
+    <link rel="icon" type="image/png" href="/img/icon.png" />
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-
-    <!-- Google Analytics — only loads in production -->
     {gaId && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
-        <script define:vars={{ gaId }}>
+        <script is:inline define:vars={{ gaId }}>
           window.dataLayer = window.dataLayer || []
           function gtag() { dataLayer.push(arguments) }
           gtag('js', new Date())
@@ -74,12 +84,17 @@ const gaId       = settings?.googleAnalyticsId
   </head>
 
   <body>
-    <Nav nav={nav} />
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="nav-scrim" id="nav-scrim"></div>
 
-    <main id="main-content">
-      <slot />
-    </main>
+    <div class="sheet">
+      <Nav nav={nav} />
+      <main id="main">
+        <slot />
+      </main>
+    </div>
 
-    <Footer settings={settings} nav={nav} />
+    <Footer settings={settings} />
+    <script>import '../scripts/site.ts'</script>
   </body>
 </html>

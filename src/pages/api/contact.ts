@@ -1,19 +1,31 @@
 import type { APIRoute } from 'astro'
 import { z } from 'zod'
 
-/* ── Validation Schema ────────────────────────────────────────────────────── */
-
-const ContactSchema = z.object({
-  name:    z.string().min(2,  'Name must be at least 2 characters'),
-  email:   z.string().email('Please enter a valid email address'),
-  phone:   z.string().optional(),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
+const Base = z.object({
+  name: z.string().trim().min(2, 'Name must be at least 2 characters'),
+  email: z.string().trim().email('Please enter a valid email address'),
+  phone: z.string().trim().optional(),
+  company: z.string().optional(), // honeypot
 })
 
-/* ── Rate Limit (simple in-memory) ───────────────────────────────────────── */
-// For production, replace with Netlify Edge rate limiting or Upstash Redis
+const FormSchema = z.discriminatedUnion('kind', [
+  Base.extend({
+    kind: z.literal('contact'),
+    topic: z.string().optional(),
+    message: z.string().trim().min(10, 'Message must be at least 10 characters'),
+  }),
+  Base.extend({
+    kind: z.literal('updates'),
+    bibleStudyReminder: z.boolean().optional(),
+  }),
+])
+
+const json = (body: unknown, status: number) =>
+  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
+
+// ponytail: in-memory, so per function instance. Upgrade to Netlify rate limiting if spam shows up.
 const submissions = new Map<string, number>()
-const RATE_LIMIT_MS = 60_000 // 1 submission per IP per minute
+const RATE_LIMIT_MS = 60_000
 
 function isRateLimited(ip: string): boolean {
   const last = submissions.get(ip)
@@ -22,72 +34,62 @@ function isRateLimited(ip: string): boolean {
   return false
 }
 
-/* ── Handler ─────────────────────────────────────────────────────────────── */
-
 export const POST: APIRoute = async ({ request, site }) => {
-  // Rate limit
-  const ip = request.headers.get('x-forwarded-for') ?? 'unknown'
-  if (isRateLimited(ip)) {
-    return new Response(
-      JSON.stringify({ error: 'Too many submissions. Please wait a minute and try again.' }),
-      { status: 429, headers: { 'Content-Type': 'application/json' } }
-    )
-  }
-
-  // Parse body
   let body: unknown
   try {
     body = await request.json()
   } catch {
-    return new Response(
-      JSON.stringify({ error: 'Invalid request body.' }),
-      { status: 400, headers: { 'Content-Type': 'application/json' } }
-    )
+    return json({ error: 'Invalid request body.' }, 400)
   }
 
-  // Validate
-  const result = ContactSchema.safeParse(body)
-  if (!result.success) {
-    const errors = result.error.flatten().fieldErrors
-    return new Response(
-      JSON.stringify({ error: 'Validation failed.', fields: errors }),
-      { status: 422, headers: { 'Content-Type': 'application/json' } }
-    )
+  const result = FormSchema.safeParse(body)
+  if (!result.success) return json({ error: 'Validation failed.', fields: result.error.flatten().fieldErrors }, 422)
+
+  const { company, kind, ...fields } = result.data
+  if (company) return json({ success: true }, 200) // bots get a quiet success
+
+  if (isRateLimited(request.headers.get('x-forwarded-for') ?? 'unknown')) {
+    return json({ error: 'Too many submissions. Please wait a minute and try again.' }, 429)
   }
 
-  const { name, email, phone, message } = result.data
-
-  // Build n8n payload
   const payload = {
-    name,
-    email,
-    phone:     phone ?? '',
-    message,
-    source:    'website-contact-form',
+    ...fields,
+    phone: fields.phone ?? '',
+    source: kind === 'contact' ? 'website-contact-form' : 'website-updates-form',
     timestamp: new Date().toISOString(),
-    siteUrl:   site?.href ?? request.headers.get('origin') ?? '',
+    siteUrl: site?.href ?? request.headers.get('origin') ?? '',
   }
 
-  // Send to n8n (fire-and-forget — never block the user response)
+  // Awaited on purpose: a prayer request must not be reported as sent if it was lost.
   const webhookUrl = import.meta.env.N8N_CONTACT_WEBHOOK_URL
-  if (webhookUrl) {
-    fetch(webhookUrl, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload),
-    })
-      .then((r) => { if (!r.ok) console.error('[contact] n8n webhook returned', r.status) })
-      .catch((err: unknown) => console.error('[contact] n8n webhook error:', err))
-  } else {
-    console.log('[contact] No webhook URL configured, skipping n8n. Payload:', JSON.stringify(payload))
+  try {
+    if (webhookUrl) {
+      const res = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) throw new Error(`n8n returned ${res.status}`)
+    } else if (import.meta.env.DEV) {
+      console.log('[contact] No webhook set. Submission type:', payload.source)
+    } else {
+      // ponytail: until this client's n8n webhook exists, Netlify Forms stores submissions and emails the church.
+      const form = new URLSearchParams({ 'form-name': kind })
+      for (const [key, value] of Object.entries(fields)) form.set(key, String(value ?? ''))
+      const res = await fetch(new URL('/__forms.html', request.url), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: form.toString(),
+      })
+      if (!res.ok) throw new Error(`Netlify Forms returned ${res.status}`)
+    }
+  } catch (err) {
+    console.error('[contact] delivery failed:', err)
+    return json({ error: 'We could not send that. Please try again.' }, 502)
   }
 
-  return new Response(
-    JSON.stringify({ success: true }),
-    { status: 200, headers: { 'Content-Type': 'application/json' } }
-  )
+  return json({ success: true }, 200)
 }
 
-// Block all other methods
-export const GET:  APIRoute = () => new Response('Method Not Allowed', { status: 405 })
-export const PUT:  APIRoute = () => new Response('Method Not Allowed', { status: 405 })
+export const GET: APIRoute = () => new Response('Method Not Allowed', { status: 405 })
+export const PUT: APIRoute = () => new Response('Method Not Allowed', { status: 405 })

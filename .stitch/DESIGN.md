@@ -1,280 +1,55 @@
-# Design System: [Client Name] ([Business Type])
+New Direction C.O.G.I.C is a contemporary church with Church of God in Christ roots. The identity is called **Forward Path**: an angular N framing a road that rises toward an inset cross. Build every surface so it says the same thing the mark says — movement, welcome, steady ground.
 
-<!--
-  ┌─────────────────────────────────────────────────────────────────┐
-  │  ASCEND AI MARKETING — DESIGN.MD TEMPLATE                       │
-  │                                                                 │
-  │  HOW TO USE THIS FILE:                                          │
-  │  1. Replace every [PLACEHOLDER] with client-specific values     │
-  │  2. This file is read by Google Stitch for design generation    │
-  │  3. This file is read by Claude Code for consistent building    │
-  │  4. The CSS tokens in global.css must match these values        │
-  │  5. Commit this file to the repo root + .stitch/ folder         │
-  └─────────────────────────────────────────────────────────────────┘
--->
+## How to use this system
 
----
+Set body copy in `body` and `ink-body` on `surface`. Set headings in the `Display` and `Headings` groups in `ink`. Use `brand-blue` for anything a person clicks and `brand-sky` only on dark grounds. Keep the page white: alternate `surface` with `surface-sunken` or `surface-tint`, and use `brand-navy` for full-width bands, never for a whole page.
 
-## 1. Visual Theme & Atmosphere
+## Content fundamentals
 
-[2–4 sentences describing the emotional feel and personality of this brand.
-What does the design say about the company? What makes it different from
-competitors in this market? What should a first-time visitor feel?
+**Voice.** Warm, plain, present tense. Speak to one person as "you" and about the church as "we". Short sentences. No church jargon a first-time visitor would have to translate.
 
-Example: "Apex Roofing's design is built to convey durability and trust —
-the visual equivalent of a solid handshake. Deep slate tones and structured
-layouts communicate professionalism, while warm accent colors and approachable
-typography remind homeowners this is a family business, not a faceless contractor.
-Where competitors use generic stock-photo-heavy sites, Apex leads with real
-project photography and clear social proof."]
+**Write like this:** "Online Bible Study, every Wednesday at 7:00 PM." "You are welcome exactly as you are." "Our goal is spiritual service and development, for each person and for the whole community."
 
-**Key Characteristics:**
-- [Characteristic 1 — e.g. "Clean, structured layouts that signal professionalism"]
-- [Characteristic 2 — e.g. "Warm accents that humanize a trade business"]
-- [Characteristic 3 — e.g. "Real photography over stock images"]
-- [Characteristic 4 — e.g. "Bold, scannable headlines for busy homeowners"]
+**Not like this:** "We cordially invite you to join us in fellowship." "Come experience the anointing." Anything with an exclamation point in a heading.
 
----
+**COGIC roots stay in the footer and the About page, not the headline.** The church is Church of God in Christ and does not hide it, but the front door speaks to a neighbor deciding where to spend Sunday morning, not to a denomination.
 
-## 2. Color Palette & Roles
+**Casing.** Sentence case for headings, buttons and navigation. All caps only in `eyebrow`, which echoes the letterspaced COGIC line in the logo, and never longer than three words.
 
-### Primary
-- **Brand Primary** (`#[HEX]`): [Role — e.g. "CTA buttons, links, active nav states, key highlights"]
-- **Brand Hover** (`#[HEX]`): [Role — e.g. "Hover state for brand primary elements"]
-- **Brand Accent** (`#[HEX]`): [Role — e.g. "Secondary highlights, badges, decorative elements"]
+**Times and dates.** "Wednesdays at 7:00 PM." "Sunday, September 16." Spell the day out; use a colon and AM/PM in caps.
 
-### Surfaces & Backgrounds
-- **Background** (`#[HEX]`): [Role — e.g. "Primary page background"]
-- **Background Muted** (`#[HEX]`): [Role — e.g. "Section alternation, card backgrounds"]
-- **Background Dark** (`#[HEX]`): [Role — e.g. "Footer, dark CTA sections"]
+**Scripture and creed.** Set the Affirmation of Faith statements in `creed`, in `ink`, on `surface-tint`, one statement per line with no bullet. Cite a verse as "John 3:16" on its own line in `caption` and `ink-muted`.
 
-### Text
-- **Text Primary** (`#[HEX]`): [Role — e.g. "Headings and high-emphasis body text"]
-- **Text Muted** (`#[HEX]`): [Role — e.g. "Body copy, descriptions, secondary info"]
-- **Text Inverse** (`#[HEX]`): [Role — e.g. "Text on dark backgrounds"]
+**No emoji anywhere.** Not in headings, buttons, social captions or email subject lines.
 
-### Borders
-- **Border** (`#[HEX]`): [Role — e.g. "Default borders, card outlines, dividers"]
-- **Border Strong** (`#[HEX]`): [Role — e.g. "Prominent borders, hover states"]
+## Visual foundations
 
-### Semantic
-- **Success** (`#[HEX]`): [Role — e.g. "Form success states, confirmation messages"]
-- **Error** (`#[HEX]`): [Role — e.g. "Form errors, warnings"]
+**Color.** Three brand colors, in this order of weight: `brand-navy` carries the identity, `brand-blue` carries action, `brand-sky` is the accent. On white, `brand-sky` reads only 2.7:1, so it is a shape color, not a text or border color — put it on `brand-navy` or `navy-deep`, where it reads 4.7:1 and 5.6:1. Text pairs that must hold: `ink` and `ink-body` on `surface`, `surface-sunken` and `surface-tint`; `ink-inverse` on `brand-navy`, `navy-deep` and `action`; `ink-inverse-muted` on `brand-navy` and `navy-deep` only. Give every focus state `focus-ring` on light grounds and `focus-ring-inverse` on dark ones, solid, 2px, offset 2px.
 
----
+**Type.** One family, Google Sans Flex, loaded from Google Fonts across weights 300–800. Set hero headlines in `display-xl`, page titles in `display-lg`, section headings in `display-md`. Never run more than three type styles in one block. Keep body measure at 68 characters or fewer.
 
-## 3. Typography Rules
+**Spacing.** A 4px base. Sections get `space-8` of padding top and bottom on desktop, `space-6` on phones. Cards get `space-5` of padding and `space-5` between them. A heading block sits `space-6` above its content.
 
-### Font Families
-- **Heading**: `[Font Name]` — [Why this font / what it conveys]
-- **Body**: `[Font Name]` — [Why this font / what it conveys]
-- **Mono** (optional): `[Font Name]` — for code or data
+**Radius.** Cards and media use `radius-lg`, buttons `radius-md`, inputs and tags `radius-sm`, badges and date chips `radius-pill`. Nothing is fully square except full-bleed bands.
 
-*Google Fonts import URL: `[paste the Google Fonts URL here]`*
+**Borders and shadows.** The brand leans on borders and color bands. Use `border` for decorative hairlines and `border-strong` for any edge a person needs to see, such as an input or an outline button. Shadows stay navy-tinted and rare: `shadow-sm` at rest, `shadow-md` on hover, `shadow-lg` for dialogs only.
 
-### Hierarchy
+**The sky rule.** The thin `rule-sky` lines either side of the COGIC line in the logo are the one repeating graphic device. Use them to flank a small centered label, at 1px, 40–80px long. Do not stretch one across a section as a divider.
 
-| Role | Font | Size | Weight | Line Height | Notes |
-|---|---|---|---|---|---|
-| Display / H1 | [Heading] | clamp(2rem, 5vw, 3.5rem) | 800 | 1.1 | Homepage hero only |
-| H2 | [Heading] | clamp(1.75rem, 3vw, 2.5rem) | 700 | 1.2 | Section headings |
-| H3 | [Heading] | 1.5rem | 700 | 1.3 | Card titles, sub-sections |
-| H4 | [Heading] | 1.125rem | 600 | 1.4 | Small headings |
-| Body Large | [Body] | 1.125rem | 400 | 1.6 | Intro paragraphs |
-| Body | [Body] | 1rem | 400 | 1.6 | Standard body copy |
-| Body Small | [Body] | 0.875rem | 400 | 1.5 | Captions, metadata |
-| Label | [Body] | 0.75rem | 600 | 1.4 | Badges, tags, overlines |
-| Button | [Body] | 1rem | 700 | 1 | All button text |
+**Imagery.** Real photographs of the congregation, in natural light, faces visible. Crop wide. When text sits over a photo, lay `navy-deep` at 62% over it and set the text in `ink-inverse`. No stock photos of hands in silhouette, no lens flares, no darkened stage shots that hide who is there.
 
-### Principles
-- [Principle 1 — e.g. "Headings are bold and assertive — this is a trade business, not a spa"]
-- [Principle 2 — e.g. "Body text is generous at 1.6 line-height — mobile readers need breathing room"]
-- [Principle 3 — e.g. "No font sizes below 14px anywhere on the site"]
+**Motion.** 150ms on hover and focus, 250ms on anything entering the page, ease-out. Nothing that moves on its own, no carousels that auto-advance.
 
----
+**States.** Every interactive element needs rest, hover, focus and disabled. Disabled is `ink-muted` on `surface-sunken` with `border`. Success is `success` and error is `danger`, each always carrying a word, never color alone.
 
-## 4. Component Stylings
+## Iconography
 
-### Buttons
+The brand ships no icon set. Use [Lucide](https://lucide.dev) at 24px, 1.75px stroke, in `ink-body` on light grounds and `ink-inverse-muted` on dark. This is a substitution, not a brand asset: replace it if the church adopts an icon library of its own.
 
-**Primary Button**
-- Background: Brand Primary (`#[HEX]`)
-- Text: White or Text Inverse
-- Padding: `0.75rem 1.75rem`
-- Radius: `var(--radius-md)` ([VALUE]px)
-- Hover: Brand Hover (`#[HEX]`)
-- [Any other notes]
+## The logo
 
-**Secondary / Outline Button**
-- Background: Transparent
-- Border: 2px solid Border Strong
-- Text: Text Primary
-- Hover: Background Muted fill
-- Radius: same as primary
+Three files live in the **Logos** asset group: the stacked lockup, the horizontal lockup and the mark on its own. They are PNGs on transparent grounds, drawn for light backgrounds. Read `assets/Logos/README.md` before placing one. There is no vector master and no reversed (white) version yet; both are worth commissioning.
 
-**Ghost Button**
-- Background: Transparent
-- Text: Brand Primary
-- No border
-- Hover: Background Muted
+## Approved site additions
 
-### Cards
-- Background: Background Muted (`#[HEX]`)
-- Border: 1px solid Border (`#[HEX]`)
-- Radius: `var(--radius-xl)` ([VALUE]px)
-- Padding: `2rem`
-- Hover: Lifted shadow — `0 8px 30px rgba(0,0,0,0.08)`
-
-### Forms / Inputs
-- Background: Background (`#[HEX]`)
-- Border: 1px solid Border
-- Focus: 2px ring, Brand Primary color
-- Radius: `var(--radius-md)`
-- Padding: `0.625rem 0.875rem`
-- Font size: `1rem`
-
-### Navigation
-- Background: Background + `backdrop-filter: blur(8px)`
-- Position: `sticky top-0`
-- Height: `4rem`
-- Border-bottom: 1px solid Border
-- Active link: Text Primary + Background Muted highlight
-- CTA button: Primary Button style
-
-### Hero Section
-- Background: Background Muted
-- Layout: [Single column / Two column split / Full-width image overlay]
-- Headline size: Display (clamp)
-- [Any other notes]
-
----
-
-## 5. Layout Principles
-
-### Spacing System (base 8px)
-- `--spacing-1`: 0.5rem (8px)
-- `--spacing-2`: 1rem (16px)
-- `--spacing-3`: 1.5rem (24px)
-- `--spacing-4`: 2rem (32px)
-- `--spacing-6`: 3rem (48px)
-- `--spacing-8`: 4rem (64px)
-- `--spacing-10`: 5rem (80px)
-
-### Container
-- Max width: `1200px`
-- Padding: `1.5rem` each side (mobile: `1rem`)
-
-### Section Padding
-- Standard sections: `5rem` top and bottom
-- Hero: `5rem` top, `5rem` bottom
-- Compact sections: `3rem` top and bottom
-
-### Grid System
-- Mobile: single column
-- Tablet (640px+): 2-column
-- Desktop (1024px+): up to 3-column
-- Gap: `1.5rem` standard, `2rem` for feature grids
-
-### Border Radius Scale
-- `--radius-sm`: 4px — minimal elements
-- `--radius-md`: 8px — buttons, inputs
-- `--radius-lg`: 12px — small cards
-- `--radius-xl`: 16px — standard cards
-- `--radius-2xl`: 24px — hero images, large containers
-- `--radius-full`: 9999px — pills, badges
-
----
-
-## 6. Depth & Elevation
-
-| Level | Treatment | Used For |
-|---|---|---|
-| Flat | No shadow, no border | Page background |
-| Bordered | `1px solid var(--color-border)` | Cards, inputs |
-| Lifted | `0 4px 16px rgba(0,0,0,0.06)` | Hover cards |
-| Floating | `0 8px 30px rgba(0,0,0,0.10)` | Modals, dropdowns |
-| Hero | `0 25px 50px rgba(0,0,0,0.15)` | Hero images |
-
----
-
-## 7. Do's and Don'ts
-
-### Do
-- [DO 1 — e.g. "Use Brand Primary only for CTAs and key interactive elements"]
-- [DO 2 — e.g. "Alternate section backgrounds between Background and Background Muted"]
-- [DO 3 — e.g. "Use real client photography wherever possible"]
-- [DO 4 — e.g. "Keep paragraphs short — 2–3 sentences max for this audience"]
-- [DO 5 — e.g. "Include a CTA in every section — this is a lead-gen site"]
-
-### Don't
-- [DON'T 1 — e.g. "Don't use more than 2 type weights — bold and regular only"]
-- [DON'T 2 — e.g. "Don't use gradients — flat color only"]
-- [DON'T 3 — e.g. "Don't use decorative fonts — legibility is priority one"]
-- [DON'T 4 — e.g. "Don't stack more than 2 CTAs in the same view"]
-- [DON'T 5 — e.g. "Don't use cool-toned grays — all neutrals should feel warm"]
-
----
-
-## 8. Responsive Behavior
-
-### Breakpoints
-| Name | Width | Key Changes |
-|---|---|---|
-| Mobile | < 640px | Single column, stacked nav, reduced type scale |
-| Tablet | 640px–1023px | 2-column grids, condensed nav |
-| Desktop | 1024px+ | Full layout, multi-column, max typography |
-
-### Collapsing Strategy
-- Navigation: full horizontal → hamburger at mobile
-- Hero: 2-column → single column stacked (text above image)
-- Service cards: 3-col → 2-col → 1-col
-- Footer: 3-col → 2-col → 1-col
-- Type scale: clamp() handles fluid scaling automatically
-
----
-
-## 9. Agent Prompt Guide
-
-### Quick Color Reference
-```
-Brand Primary:    #[HEX]
-Brand Hover:      #[HEX]
-Background:       #[HEX]
-Background Muted: #[HEX]
-Text Primary:     #[HEX]
-Text Muted:       #[HEX]
-Border:           #[HEX]
-```
-
-### CSS Variable Mapping
-```css
---color-brand:         #[HEX];
---color-brand-hover:   #[HEX];
---color-bg:            #[HEX];
---color-bg-muted:      #[HEX];
---color-bg-dark:       #[HEX];
---color-text:          #[HEX];
---color-text-muted:    #[HEX];
---color-text-inverse:  #[HEX];
---color-border:        #[HEX];
---color-border-strong: #[HEX];
---font-heading:        '[Font Name]', system-ui, sans-serif;
---font-body:           '[Font Name]', system-ui, sans-serif;
-```
-
-### Example Component Prompts (for Stitch)
-- "Create a hero section on [Background Muted] with a [Display] headline in [Heading font] weight 800.
-   Subheadline in [Text Muted] at Body Large. Primary CTA button in [Brand Primary] with white text,
-   [radius-md] radius. Two-column layout with text left, image right."
-
-- "Design a service card on [Background Muted] with [border] border, [radius-xl] radius.
-   Icon placeholder in [Brand Primary]. Card title in H3 [Heading font]. Description in Body [Body font]
-   [Text Muted]. Hover: lifted shadow."
-
-- "Build a dark CTA banner section on [Background Dark] background. Headline in white H2.
-   Body text in white 80% opacity. Button in white background, [Brand Primary] text."
-
----
-
-*Generated by Ascend AI Marketing — Design.MD Generator*
-*Client: [Client Name] | Date: [DATE] | Version: 1.0*
+The approved live site added two warm colors that every new page keeps: `warm-gold` #D4A64A for giving buttons and italic accents on dark bands, and `warm-cream` #FFF7E8 for the hero and the Affirmation of Faith. It also uses Instrument Serif italic for emphasized words in headings. `src/styles/global.css` is the working source for all of these values.

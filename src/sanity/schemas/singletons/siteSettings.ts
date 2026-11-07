@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { CogIcon } from '@sanity/icons'
+import { churchFields } from '../objects/churchFields'
 
 export const siteSettings = defineType({
   name: 'siteSettings',
@@ -7,17 +8,22 @@ export const siteSettings = defineType({
   type: 'document',
   icon: CogIcon,
   groups: [
-    { name: 'identity', title: 'Business Identity' },
+    { name: 'identity', title: 'Church Identity' },
+    { name: 'gatherings', title: 'Gatherings' },
+    { name: 'pastor', title: 'Pastor' },
+    { name: 'beliefs', title: 'Beliefs' },
     { name: 'contact', title: 'Contact Info' },
     { name: 'social', title: 'Social Media' },
     { name: 'footer', title: 'Footer' },
     { name: 'seo', title: 'Global SEO' },
   ],
   fields: [
+    ...churchFields,
+
     // ─── Identity ──────────────────────────────────────────────────
     defineField({
       name: 'siteName',
-      title: 'Business Name',
+      title: 'Church Name',
       type: 'string',
       group: 'identity',
       validation: (Rule) => Rule.required(),

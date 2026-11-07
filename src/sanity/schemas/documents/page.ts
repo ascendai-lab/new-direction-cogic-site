@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { DocumentIcon } from '@sanity/icons'
+import { sectionsField } from '../objects/sections'
 
 export const page = defineType({
   name: 'page',
@@ -30,9 +31,16 @@ export const page = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'heroKicker',
+      title: 'Small line above the headline',
+      type: 'string',
+      group: 'content',
+    }),
+    defineField({
       name: 'heroHeadline',
       title: 'Page Headline',
       type: 'string',
+      description: 'Wrap a word in *asterisks* to set it in the italic serif.',
       group: 'content',
     }),
     defineField({
@@ -42,12 +50,7 @@ export const page = defineType({
       rows: 2,
       group: 'content',
     }),
-    defineField({
-      name: 'body',
-      title: 'Page Content',
-      type: 'portableTextContent',
-      group: 'content',
-    }),
+    sectionsField('content'),
     defineField({
       name: 'seo',
       title: 'SEO',

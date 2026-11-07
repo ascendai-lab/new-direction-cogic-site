@@ -1,0 +1,12 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro'
+Astro.response.status = 404
+---
+
+<BaseLayout title="Page not found" noIndex>
+  <section class="hero page-hero pad center">
+    <h1 class="display center rise" style="margin-inline:auto">This page took a <em class="serif">new direction.</em></h1>
+    <p class="lead rise">We could not find what you were looking for, but you are still welcome here.</p>
+    <p class="mt5 rise"><a class="btn btn--primary" href="/">Back to the homepage <span class="arw" aria-hidden="true">&rarr;</span></a></p>
+  </section>
+</BaseLayout>

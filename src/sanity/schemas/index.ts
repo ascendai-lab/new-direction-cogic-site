@@ -3,6 +3,7 @@ import { videoEmbed } from './objects/videoEmbed'
 import { seoFields } from './objects/seoFields'
 import { portableTextContent } from './objects/portableText'
 import { ctaButton } from './objects/ctaButton'
+import { sectionTypes } from './objects/sections'
 
 // Singletons
 import { homePage } from './singletons/homePage'
@@ -18,6 +19,7 @@ export const schemaTypes = [
   seoFields,
   portableTextContent,
   ctaButton,
+  ...sectionTypes,
 
   // Singletons
   homePage,

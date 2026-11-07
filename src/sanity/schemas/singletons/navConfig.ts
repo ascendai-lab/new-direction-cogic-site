@@ -57,7 +57,17 @@ export const navConfig = defineType({
       name: 'ctaButton',
       title: 'Nav CTA Button (optional)',
       type: 'ctaButton',
-      description: 'The primary action button in the nav (e.g. "Get a Free Quote")',
+      description: 'The gold button in the header.',
+    }),
+    defineField({
+      name: 'secondaryButton',
+      title: 'Second header button (optional)',
+      type: 'ctaButton',
+    }),
+    defineField({
+      name: 'mobileButton',
+      title: 'Button at the bottom of the phone menu',
+      type: 'ctaButton',
     }),
   ],
   preview: {
