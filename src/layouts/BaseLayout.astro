@@ -29,7 +29,7 @@ const pageDesc = description ?? settings?.defaultSeo?.metaDescription ?? ''
 const pageImage = ogImage ?? settings?.defaultSeo?.ogImage?.asset?.url ?? new URL('/img/share.jpg', Astro.url).href
 const gaId = settings?.googleAnalyticsId
 // ponytail: stays hidden from search until ALLOW_INDEXING=true is set at launch, so previews never get indexed.
-const hideFromSearch = noIndex || import.meta.env.ALLOW_INDEXING !== 'true'
+const hideFromSearch = noIndex || (process.env.ALLOW_INDEXING ?? import.meta.env.ALLOW_INDEXING) !== 'true'
 
 // Address is left out on purpose: they rent for now and have no Google listing until they own a building.
 const jsonLd = {

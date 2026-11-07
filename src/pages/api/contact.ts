@@ -61,7 +61,8 @@ export const POST: APIRoute = async ({ request, site }) => {
   }
 
   // Awaited on purpose: a prayer request must not be reported as sent if it was lost.
-  const webhookUrl = import.meta.env.N8N_CONTACT_WEBHOOK_URL
+  // Read at request time so the webhook can be added in Netlify without a rebuild.
+  const webhookUrl = process.env.N8N_CONTACT_WEBHOOK_URL ?? import.meta.env.N8N_CONTACT_WEBHOOK_URL
   try {
     if (webhookUrl) {
       const res = await fetch(webhookUrl, {
