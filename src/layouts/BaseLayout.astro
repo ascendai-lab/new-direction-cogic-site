@@ -5,6 +5,7 @@ import Footer from '@components/layout/Footer.astro'
 import { getClient } from '@cms/client'
 import { navQuery, siteSettingsQuery } from '@cms/queries'
 import type { Settings } from '@cms/types'
+import { indexingAllowed } from '@/lib/seo'
 
 interface Props {
   title?: string
@@ -29,18 +30,56 @@ const pageDesc = description ?? settings?.defaultSeo?.metaDescription ?? ''
 const pageImage = ogImage ?? settings?.defaultSeo?.ogImage?.asset?.url ?? new URL('/img/share.jpg', Astro.url).href
 const gaId = settings?.googleAnalyticsId
 // ponytail: stays hidden from search until ALLOW_INDEXING=true is set at launch, so previews never get indexed.
-const hideFromSearch = noIndex || (process.env.ALLOW_INDEXING ?? import.meta.env.ALLOW_INDEXING) !== 'true'
+const hideFromSearch = noIndex || !indexingAllowed()
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href
 
-// Address is left out on purpose: they rent for now and have no Google listing until they own a building.
+// Street address is left out on purpose: they rent for now and have no Google listing until they own a building.
+const home = new URL('/', Astro.site ?? Astro.url).href
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const vineland = { '@type': 'PostalAddress', addressLocality: 'Vineland', addressRegion: 'NJ', addressCountry: 'US' }
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Church',
-  name: siteTitle,
-  alternateName: 'New Direction Church of God in Christ',
-  description: pageDesc,
-  url: Astro.site?.href,
-  email: settings?.email,
-  employee: { '@type': 'Person', name: settings?.pastorName, jobTitle: 'Pastor' },
+  '@graph': [
+    {
+      '@type': 'Church',
+      '@id': `${home}#church`,
+      name: siteTitle,
+      alternateName: 'New Direction Church of God in Christ',
+      description: settings?.defaultSeo?.metaDescription,
+      url: home,
+      logo: new URL('/img/logo.png', home).href,
+      image: new URL('/img/share.jpg', home).href,
+      email: settings?.email,
+      areaServed: { '@type': 'City', name: 'Vineland, NJ' },
+      memberOf: { '@type': 'Organization', name: 'Church of God in Christ', url: 'https://www.cogic.org' },
+      employee: { '@type': 'Person', name: settings?.pastorName, jobTitle: 'Pastor', url: new URL('/pastor', home).href },
+      event: settings?.gatherings?.map((g) => {
+        const link = g.action?.href?.startsWith('http') ? g.action.href : undefined
+        const online = g.key === 'bibleStudy' || g.key === 'prayerLine'
+        return {
+          '@type': 'Event',
+          name: `${g.name} at ${siteTitle}`,
+          description: `${g.name}, ${g.timeLabel} (Eastern). Everyone is welcome.`,
+          eventAttendanceMode: `https://schema.org/${online ? 'Online' : 'Offline'}EventAttendanceMode`,
+          location: online
+            ? { '@type': 'VirtualLocation', url: link ?? new URL(`/${g.key === 'prayerLine' ? 'prayer-line' : 'bible-study'}`, home).href }
+            : { '@type': 'Place', name: settings?.locationName ?? 'Vineland, NJ', address: vineland },
+          eventSchedule: {
+            '@type': 'Schedule',
+            repeatFrequency: 'P1W',
+            byDay: `https://schema.org/${days[g.weekday]}`,
+            startTime: g.startTime,
+            duration: `PT${g.durationMinutes}M`,
+            scheduleTimezone: 'America/New_York',
+          },
+          isAccessibleForFree: true,
+          organizer: { '@id': `${home}#church` },
+        }
+      }),
+    },
+    { '@type': 'WebSite', '@id': `${home}#website`, url: home, name: siteTitle, publisher: { '@id': `${home}#church` }, inLanguage: 'en-US' },
+    { '@type': 'WebPage', url: canonical, name: pageTitle, description: pageDesc, isPartOf: { '@id': `${home}#website` } },
+  ],
 }
 ---
 
@@ -53,17 +92,21 @@ const jsonLd = {
     {pageDesc && <meta name="description" content={pageDesc} />}
     {hideFromSearch && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#0d2645" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site ?? Astro.url).href} />
+    <link rel="canonical" href={canonical} />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
-    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:image" content={pageImage} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" type="image/png" href="/img/icon.png" />
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" />

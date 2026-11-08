@@ -93,3 +93,13 @@ export const allPageSlugsQuery = groq`
     "slug": slug.current
   }
 `
+
+export const pageIndexQuery = groq`
+  *[_type == "page" && defined(slug.current)] | order(slug.current asc) {
+    "slug": slug.current,
+    title,
+    "description": seo.metaDescription,
+    "noIndex": seo.noIndex,
+    "updatedAt": _updatedAt
+  }
+`

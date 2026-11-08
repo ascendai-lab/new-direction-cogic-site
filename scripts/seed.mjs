@@ -19,6 +19,15 @@ const image = async (file) => {
 }
 const keyed = (items) => items.map((i) => (typeof i === 'object' ? { _key: randomUUID().slice(0, 12), ...i } : i))
 const cta = (label, href) => ({ _type: 'ctaButton', label, href, variant: 'primary' })
+const META_TITLES = {
+  visit: 'Plan your visit: Sunday worship in Vineland, NJ',
+  'bible-study': 'Online Bible Study on Zoom, Wednesdays at 7 PM',
+  'prayer-line': 'Prayer Line, Thursdays at 8 PM',
+  about: 'About our church in Vineland, NJ',
+  pastor: 'Elder Dr. Paul S. Harden, Sr., Pastor',
+  give: 'Give online',
+  contact: 'Contact us',
+}
 const page = (slug, title, hero, sections, description) => ({
   _id: `page-${slug}`,
   _type: 'page',
@@ -26,7 +35,7 @@ const page = (slug, title, hero, sections, description) => ({
   slug: { _type: 'slug', current: slug },
   ...hero,
   sections: keyed(sections),
-  seo: { _type: 'seoFields', metaDescription: description },
+  seo: { _type: 'seoFields', metaTitle: META_TITLES[slug], metaDescription: description },
 })
 
 const ZOOM = 'https://zoom.us/j/8372535548'
@@ -53,7 +62,7 @@ const docs = [
     donateUrl: GIVE,
     footerTagline: 'Whatever brought you here, you are welcome exactly as you are.',
     copyrightName: 'New Direction C.O.G.I.C',
-    defaultSeo: { _type: 'seoFields', metaDescription: 'New Direction C.O.G.I.C is a contemporary church serving its community through worship, study and service.' },
+    defaultSeo: { _type: 'seoFields', metaDescription: 'New Direction C.O.G.I.C is a contemporary Church of God in Christ congregation in Vineland, NJ, gathering for Sunday worship, Bible study and prayer.' },
     gatherings: keyed([
       {
         key: 'sundaySchool', name: 'Sunday School (All Ages)', timeLabel: 'Sundays at 10:00 AM', nextLabel: 'Next class',
@@ -291,7 +300,7 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
       body: 'We use Zeffy for online giving. Thank you for standing with us.',
       button: { ...cta('Give online', GIVE), openInNewTab: true },
     },
-  ], 'Give online to support New Direction C.O.G.I.C.'),
+  ], 'Give online to support New Direction C.O.G.I.C, a growing church in Vineland, NJ. Your gift helps launch and grow our ministry.'),
 
   page('contact', 'Contact', {
     heroKicker: 'Contact',
