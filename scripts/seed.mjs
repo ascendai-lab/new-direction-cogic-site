@@ -57,6 +57,7 @@ const docs = [
     tagline: 'Come, Worship, and Grow with Us',
     email: 'thenewdirectioncogic@gmail.com',
     address: ADDRESS,
+    googleAnalyticsId: 'G-Q1BGD7M98D',
     locationName: VENUE,
     directions: 'Take Route 55 to Exit 32A. We meet in the Omni Ballroom at the Ramada, on the left side of the hotel behind IHOP.',
     donateUrl: GIVE,
