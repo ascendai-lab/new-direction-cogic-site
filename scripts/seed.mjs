@@ -58,7 +58,7 @@ const docs = [
     email: 'thenewdirectioncogic@gmail.com',
     address: ADDRESS,
     googleAnalyticsId: 'G-Q1BGD7M98D',
-    facebook: 'https://www.facebook.com/profile.php?id=61596585595430',
+    facebook: 'https://www.facebook.com/thenewdirectioncogic',
     instagram: 'https://www.instagram.com/thenewdirectioncogic/',
     youtube: 'https://www.youtube.com/@thenewdirectioncogic',
     locationName: VENUE,
