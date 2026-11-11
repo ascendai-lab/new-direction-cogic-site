@@ -4,6 +4,7 @@ import type { Settings } from '@cms/types'
 interface Props { settings?: Settings }
 const { settings } = Astro.props
 const year = new Date().getFullYear()
+const socials = [['Facebook', settings?.facebook], ['Instagram', settings?.instagram], ['YouTube', settings?.youtube]].filter(([, href]) => href)
 ---
 
 <footer class="site-footer">
@@ -27,6 +28,9 @@ const year = new Date().getFullYear()
           <li><a href="/#updates">Get updates</a></li>
           <li><a href="/pastor">Meet our pastor</a></li>
           <li><a href="/give">Give</a></li>
+          {socials.length > 0 && (
+            <li><span class="muted">Follow:</span> {socials.map(([label, href], i) => <>{i > 0 && ' · '}<a href={href} target="_blank" rel="noopener">{label}</a></>)}</li>
+          )}
         </ul>
       </div>
     </div>

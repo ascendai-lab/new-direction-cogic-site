@@ -50,6 +50,7 @@ const jsonLd = {
       logo: new URL('/img/logo.png', home).href,
       image: new URL('/img/share.jpg', home).href,
       email: settings?.email,
+      sameAs: [settings?.facebook, settings?.instagram, settings?.youtube].filter(Boolean),
       areaServed: { '@type': 'City', name: 'Vineland, NJ' },
       memberOf: { '@type': 'Organization', name: 'Church of God in Christ', url: 'https://www.cogic.org' },
       employee: { '@type': 'Person', name: settings?.pastorName, jobTitle: 'Pastor', url: new URL('/pastor', home).href },

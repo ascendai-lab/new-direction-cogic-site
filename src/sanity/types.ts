@@ -18,6 +18,9 @@ export interface Gathering {
 export interface Settings {
   siteName?: string
   email?: string
+  facebook?: string
+  instagram?: string
+  youtube?: string
   phone?: string
   address?: string
   directions?: string
