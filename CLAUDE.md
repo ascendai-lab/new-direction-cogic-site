@@ -3,6 +3,8 @@
 This file tells Claude Code everything it needs to build consistently in this project.
 Read this before touching any file.
 
+> **Project-specific:** read `HANDOFF.md` first. It covers this site's architecture, deploy command, form routing, constraints and next steps, and it wins wherever it differs from the generic starter rules below.
+
 ---
 
 ## Stack
