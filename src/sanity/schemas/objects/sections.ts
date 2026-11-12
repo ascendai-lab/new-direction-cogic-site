@@ -15,7 +15,6 @@ const tone = defineField({
   },
   initialValue: 'white',
 })
-const eyebrow = defineField({ name: 'eyebrow', title: 'Small label', type: 'string', description: 'Three words at most.' })
 const heading = defineField({
   name: 'heading',
   title: 'Heading',
@@ -30,13 +29,13 @@ export const textBlock = defineType({
   title: 'Text',
   type: 'object',
   fields: [
-    eyebrow, heading,
+    heading,
     defineField({ name: 'body', title: 'Text', type: 'text', rows: 5, description: 'Leave a blank line between paragraphs.' }),
     link('button', 'Solid button (optional)'),
     link('textLink', 'Text link (optional)'),
     tone, anchor,
   ],
-  preview: { select: { title: 'heading', subtitle: 'eyebrow' } },
+  preview: { select: { title: 'heading' } },
 })
 
 export const cardGrid = defineType({
@@ -44,7 +43,7 @@ export const cardGrid = defineType({
   title: 'Cards',
   type: 'object',
   fields: [
-    eyebrow, heading,
+    heading,
     defineField({ name: 'numbered', title: 'Show 01, 02, 03', type: 'boolean', initialValue: true }),
     defineField({
       name: 'cards',
@@ -62,7 +61,7 @@ export const cardGrid = defineType({
     }),
     tone, anchor,
   ],
-  preview: { select: { title: 'heading', subtitle: 'eyebrow' } },
+  preview: { select: { title: 'heading' } },
 })
 
 export const gatheringBand = defineType({
@@ -83,7 +82,7 @@ export const gatheringBand = defineType({
       ] },
       validation: (Rule) => Rule.required(),
     }),
-    eyebrow, heading,
+    heading,
     defineField({ name: 'body', title: 'Text', type: 'text', rows: 3 }),
     anchor,
   ],
@@ -96,7 +95,6 @@ export const pastorBlock = defineType({
   type: 'object',
   description: 'Uses the photo and bio from Site Settings.',
   fields: [
-    eyebrow,
     defineField({ name: 'showFullBio', title: 'Show the full bio open', type: 'boolean', initialValue: false }),
     tone, anchor,
   ],
@@ -108,7 +106,7 @@ export const creedBlock = defineType({
   title: 'Affirmation of Faith',
   type: 'object',
   description: 'Uses the statements from Site Settings.',
-  fields: [eyebrow, heading, tone, anchor],
+  fields: [heading, tone, anchor],
   preview: { prepare: () => ({ title: 'Affirmation of Faith' }) },
 })
 
@@ -117,7 +115,6 @@ export const verseBlock = defineType({
   title: 'Scripture',
   type: 'object',
   fields: [
-    eyebrow,
     defineField({ name: 'quote', title: 'Verse', type: 'text', rows: 3 }),
     defineField({ name: 'cite', title: 'Reference', type: 'string' }),
     tone,
@@ -130,7 +127,7 @@ export const mapBlock = defineType({
   title: 'Location and map',
   type: 'object',
   description: 'Uses the address and directions from Site Settings.',
-  fields: [eyebrow, heading, tone, anchor],
+  fields: [heading, tone, anchor],
   preview: { select: { title: 'heading' } },
 })
 
@@ -149,7 +146,7 @@ export const formBlock = defineType({
       ] },
       validation: (Rule) => Rule.required(),
     }),
-    eyebrow, heading,
+    heading,
     defineField({ name: 'body', title: 'Text', type: 'text', rows: 3 }),
     tone, anchor,
   ],

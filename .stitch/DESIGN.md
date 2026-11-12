@@ -14,7 +14,7 @@ Set body copy in `body` and `ink-body` on `surface`. Set headings in the `Displa
 
 **COGIC roots stay in the footer and the About page, not the headline.** The church is Church of God in Christ and does not hide it, but the front door speaks to a neighbor deciding where to spend Sunday morning, not to a denomination.
 
-**Casing.** Sentence case for headings, buttons and navigation. All caps only in `eyebrow`, which echoes the letterspaced COGIC line in the logo, and never longer than three words.
+**Casing.** Sentence case for headings, buttons and navigation. The site uses no eyebrow labels above headings (removed 2026-11-12), so nothing is set in all caps.
 
 **Times and dates.** "Wednesdays at 7:00 PM." "Sunday, September 16." Spell the day out; use a colon and AM/PM in caps.
 

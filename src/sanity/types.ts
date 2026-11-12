@@ -47,7 +47,6 @@ export interface Card { _key?: string; title?: string; text?: string; link?: Cta
 export interface Section {
   _key: string
   _type: string
-  eyebrow?: string
   heading?: string
   body?: string
   tone?: string
