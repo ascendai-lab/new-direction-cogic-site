@@ -53,6 +53,14 @@ Browser ──> Netlify project "ndcogic-full-site-preview" (Astro 5 SSR + React
 - `public/__forms.html`: form definitions for Netlify Forms. **Do not delete**
 - `public/google823dd7da016576a7.html`: Search Console verification. **Do not delete**
 
+### Visual editing
+
+Open `/studio`, then the **Presentation** tab. It loads the site in a frame, turns on preview mode through `/api/draft-mode/enable`, and shows drafts with click-to-edit overlays on every page. Settings and Navigation are flagged as shown on every page.
+
+- Preview mode is a signed, httpOnly cookie (`sanity-preview`, an HMAC of `SANITY_API_READ_TOKEN`), so visitors can't switch it on. Rotating the token signs everyone out.
+- `/api/draft-mode/disable` leaves preview mode.
+- Fields used for logic, ids, class names or the `<head>` are kept free of stega markers by the `NO_STEGA` list in `src/sanity/client.ts`. Add a field there if a new one breaks in preview.
+
 ### Pages (all from Sanity)
 
 `/`, `/about`, `/bible-study`, `/contact`, `/give`, `/pastor`, `/prayer-line`, `/visit`
