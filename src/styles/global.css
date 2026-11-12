@@ -277,10 +277,10 @@ body.menu-open{overflow:hidden}
 .site-footer a:hover{color:var(--sky-light);text-decoration:underline}
 .site-footer a:focus-visible{outline-color:var(--focus-ring-inverse)}
 .site-footer .muted{color:var(--ink-inverse-muted)}
-.site-footer .socials{display:flex;gap:var(--space-3);margin-top:var(--space-4)}
+.site-footer .socials{display:flex;gap:var(--space-2);margin-top:var(--space-3)}
 .site-footer .socials a{display:inline-flex;padding:4px;border-radius:8px;transition:transform .15s ease}
 .site-footer .socials a:hover{transform:translateY(-2px)}
-.site-footer .socials svg{width:32px;height:32px;display:block}
+.site-footer .socials svg{width:22px;height:22px;display:block}
 @media (prefers-reduced-motion:reduce){.site-footer .socials a{transition:none}.site-footer .socials a:hover{transform:none}}
 .footer-bottom{border-top:1px solid var(--border-inverse);display:flex;flex-wrap:wrap;gap:var(--space-4);justify-content:space-between;padding-block:var(--space-5);font-size:12px;line-height:20px;color:var(--ink-inverse-muted)}
 .credit{font-size:11px;line-height:18px;color:var(--ink-inverse-muted);opacity:.75;padding-bottom:var(--space-5)}
