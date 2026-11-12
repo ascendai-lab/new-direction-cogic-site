@@ -76,6 +76,7 @@ export const gatheringBand = defineType({
       title: 'Which gathering',
       type: 'string',
       options: { list: [
+        { title: 'Sunday School', value: 'sundaySchool' },
         { title: 'Sunday worship', value: 'sunday' },
         { title: 'Bible Study', value: 'bibleStudy' },
         { title: 'Prayer Line', value: 'prayerLine' },

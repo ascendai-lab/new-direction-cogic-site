@@ -56,7 +56,7 @@ export interface Section {
   textLink?: Cta
   numbered?: boolean
   cards?: Card[]
-  gatheringKey?: string
+  gatheringKey?: Gathering['key']
   showFullBio?: boolean
   quote?: string
   cite?: string
