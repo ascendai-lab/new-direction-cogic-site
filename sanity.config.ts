@@ -1,7 +1,7 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
-import { presentationTool } from 'sanity/presentation'
+import { defineDocuments, defineLocations, presentationTool } from 'sanity/presentation'
 import { schemaTypes } from './src/sanity/schemas'
 import {
   DocumentIcon,
@@ -21,18 +21,33 @@ function singletonListItem(S: any, typeName: string, title: string, icon: any) {
     .child(S.document().schemaType(typeName).documentId(typeName))
 }
 
-/* ── Route Resolver ───────────────────────────────────────────────────────── */
+/* ── Presentation (visual editing) ───────────────────────────────────────── */
 
-/** Maps document types → frontend URLs for the Presentation / visual editing tool. */
-function resolveDocumentUrl(doc: any) {
-  switch (doc._type) {
-    case 'homePage':
-      return '/'
-    case 'page':
-      return doc?.slug?.current ? `/${doc.slug.current}` : '/'
-    default:
-      return '/'
-  }
+/** Which document to open when the preview shows a given URL. */
+const mainDocuments = defineDocuments([
+  { route: '/', filter: `_type == "homePage"` },
+  { route: '/:slug', filter: `_type == "page" && slug.current == $slug` },
+])
+
+/** Where each document appears on the site, shown at the top of its editor. */
+const everyPage = () => ({
+  message: 'Shown on every page',
+  tone: 'caution' as const,
+  locations: [{ title: 'Home', href: '/' }],
+})
+const locations = {
+  homePage: defineLocations({
+    select: {},
+    resolve: () => ({ locations: [{ title: 'Home', href: '/' }] }),
+  }),
+  page: defineLocations({
+    select: { title: 'title', slug: 'slug.current' },
+    resolve: (doc) => ({
+      locations: doc?.slug ? [{ title: doc.title ?? doc.slug, href: `/${doc.slug}` }] : [],
+    }),
+  }),
+  siteSettings: defineLocations({ select: {}, resolve: everyPage }),
+  navConfig: defineLocations({ select: {}, resolve: everyPage }),
 }
 
 /* ── Structure ────────────────────────────────────────────────────────────── */
@@ -72,19 +87,11 @@ export default defineConfig({
     structureTool({ structure }),
 
     presentationTool({
-      previewUrl: '/',
-      resolve: {
-        locations: {
-          homePage: {
-            select: {},
-            resolve: resolveDocumentUrl,
-          },
-          page: {
-            select: { slug: 'slug.current' },
-            resolve: resolveDocumentUrl,
-          },
-        },
+      previewUrl: {
+        preview: '/',
+        previewMode: { enable: '/api/draft-mode/enable', disable: '/api/draft-mode/disable' },
       },
+      resolve: { mainDocuments, locations },
     }),
 
     visionTool(),

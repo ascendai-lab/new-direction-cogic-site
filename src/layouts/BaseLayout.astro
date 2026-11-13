@@ -6,6 +6,9 @@ import { getClient } from '@cms/client'
 import { navQuery, siteSettingsQuery } from '@cms/queries'
 import type { Settings } from '@cms/types'
 import { indexingAllowed } from '@/lib/seo'
+import { isPreview as inPreview } from '@/lib/preview'
+import { VisualEditing } from '@sanity/astro/visual-editing'
+import { stegaClean } from '@sanity/client/stega'
 
 interface Props {
   title?: string
@@ -14,9 +17,9 @@ interface Props {
   noIndex?: boolean
 }
 
-const { title, description, ogImage, noIndex = false } = Astro.props
-
-const isPreview = Astro.cookies.has('sanity-preview-secret')
+const isPreview = inPreview(Astro.cookies)
+// Page props can carry stega edit markers in preview. Nothing in <head> should.
+const { title, description, ogImage, noIndex = false } = stegaClean(Astro.props)
 const client = getClient(isPreview)
 
 const [nav, settings] = await Promise.all([
@@ -112,9 +115,9 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" />
     <script is:inline>document.documentElement.classList.add('js')</script>
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(stegaClean(jsonLd))} />
 
-    {gaId && (
+    {gaId && !isPreview && (
       <>
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
         <script is:inline define:vars={{ gaId }}>
@@ -140,5 +143,6 @@ const jsonLd = {
 
     <Footer settings={settings} />
     <script>import '../scripts/site.ts'</script>
+    <VisualEditing enabled={isPreview} zIndex={1000} />
   </body>
 </html>

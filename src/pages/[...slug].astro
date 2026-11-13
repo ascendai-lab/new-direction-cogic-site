@@ -2,13 +2,16 @@
 import BaseLayout from '@layouts/BaseLayout.astro'
 import Sections from '@components/sections/Sections.astro'
 import { getClient } from '@cms/client'
+import { isPreview } from '@/lib/preview'
 import { pageBySlugQuery, siteSettingsQuery } from '@cms/queries'
 import { emphasize } from '@/lib/text'
 import type { Settings } from '@cms/types'
 
 const { slug } = Astro.params
 
-const client = getClient(Astro.cookies.has('sanity-preview-secret'))
+const preview = isPreview(Astro.cookies)
+if (preview) Astro.response.headers.set('Cache-Control', 'private, no-store')
+const client = getClient(preview)
 const [page, settings] = await Promise.all([
   client.fetch(pageBySlugQuery, { slug }),
   client.fetch<Settings>(siteSettingsQuery),

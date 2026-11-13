@@ -17,7 +17,6 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
   if (s._type === 'textBlock') return (
     <section class={band(s, 'statement center')} id={id}>
       <div class="stagger">
-        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
         {s.heading && <h2 class="h2" set:html={emphasize(s.heading)} />}
         {s.body && <div class="prose-block">{paragraphs(s.body).map((p) => <p class="lead mt5">{p}</p>)}</div>}
         {s.button && (
@@ -37,8 +36,7 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
   if (s._type === 'cardGrid') return (
     <section class={band(s, 'center')} id={id}>
       <div class="stagger">
-        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
-        {s.heading && <h2 class="h2 measure mt5" set:html={emphasize(s.heading)} />}
+        {s.heading && <h2 class="h2 measure" set:html={emphasize(s.heading)} />}
       </div>
       <div class={`cards${[2, 4].includes(s.cards?.length ?? 0) ? ' cards--two' : ''}`}>
         {s.cards?.map((c, i) => (
@@ -60,8 +58,7 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
       <section class="band band--deep pad" id={id}>
         <div class="split">
           <div class="stagger">
-            {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
-            {s.heading && <h2 class="h2 mt5" set:html={emphasize(s.heading)} />}
+            {s.heading && <h2 class="h2" set:html={emphasize(s.heading)} />}
             {s.body && <p class="lead mt5">{s.body}</p>}
           </div>
           <div
@@ -122,8 +119,7 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
             <img src={pastorPhoto} alt={settings?.pastorName} width="720" height="960" loading="lazy" />
           </div>
           <div class="stagger">
-            {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
-            <h2 class="h2 mt5">{settings?.pastorName}</h2>
+            <h2 class="h2">{settings?.pastorName}</h2>
             <p class="lead mt5">{settings?.pastorSummary}</p>
             {s.showFullBio
               ? <div class="bio bio-body bio-body--open">{bio}</div>
@@ -137,8 +133,7 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
   if (s._type === 'creedBlock') return (
     <section class={band(s, 'center')} id={id}>
       <div class="stagger">
-        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
-        {s.heading && <h2 class="h2 measure mt5" set:html={emphasize(s.heading)} />}
+        {s.heading && <h2 class="h2 measure" set:html={emphasize(s.heading)} />}
       </div>
       <div class="creed">{settings?.affirmation?.map((line) => <p class="reveal">{line}</p>)}</div>
       <p class="amen reveal">Amen.</p>
@@ -148,7 +143,6 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
   if (s._type === 'verseBlock') return (
     <section class={band(s, 'center')}>
       <div class="stagger">
-        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
         <p class="verse">&ldquo;{s.quote}&rdquo;</p>
         <p class="verse-cite">{s.cite}</p>
       </div>
@@ -159,8 +153,7 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
     <section class={band(s)} id={id}>
       <div class="split">
         <div class="stagger">
-          {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
-          {s.heading && <h2 class="h2 mt5" set:html={emphasize(s.heading)} />}
+          {s.heading && <h2 class="h2" set:html={emphasize(s.heading)} />}
           <p class="address">{settings?.locationName}<br />{settings?.address}</p>
           {settings?.directions && <p class="lead mt5">{settings.directions}</p>}
           <p class="mt5"><a class="btn btn--primary" href={mapUrl} target="_blank" rel="noopener">Get directions <span class="arw" aria-hidden="true">&rarr;</span></a></p>
@@ -175,8 +168,7 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
   if (s._type === 'formBlock') return (
     <section class={band(s, 'center')} id={id}>
       <div class="stagger">
-        {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
-        {s.heading && <h2 class="h2 measure mt5" set:html={emphasize(s.heading)} />}
+        {s.heading && <h2 class="h2 measure" set:html={emphasize(s.heading)} />}
         {s.body && <p class="lead measure mt5">{s.body}</p>}
       </div>
       <ChurchForm kind={s.kind ?? 'contact'} client:visible />

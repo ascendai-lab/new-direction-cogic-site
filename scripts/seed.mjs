@@ -46,8 +46,8 @@ const MAPS = `https://www.google.com/maps?q=${encodeURIComponent(`${VENUE} ${ADD
 
 const [logo, hero, pastor] = await Promise.all([image('logo.png'), image('hero-community.jpg'), image('pastor-solid-blue.png')])
 
-const creed = { _type: 'creedBlock', eyebrow: 'What we believe', heading: 'Affirmation of Faith', tone: 'cream', anchor: 'beliefs' }
-const foundation = { _type: 'verseBlock', eyebrow: 'Our foundation', quote: 'Not that we are sufficient of ourselves… but our sufficiency is of God.', cite: '2 Corinthians 3:5', tone: 'white' }
+const creed = { _type: 'creedBlock', heading: 'Affirmation of Faith', tone: 'cream', anchor: 'beliefs' }
+const foundation = { _type: 'verseBlock', quote: 'Not that we are sufficient of ourselves… but our sufficiency is of God.', cite: '2 Corinthians 3:5', tone: 'white' }
 
 const docs = [
   {
@@ -162,13 +162,13 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     ribbon: ['Sunday Worship', 'Sundays at 11:00 AM', '*Everyone is welcome*', 'Contemporary worship', 'Church of God in Christ roots'],
     sections: keyed([
       {
-        _type: 'textBlock', eyebrow: 'Our story', tone: 'white', anchor: 'story',
+        _type: 'textBlock', tone: 'white', anchor: 'story',
         heading: 'Come once, and you will not feel *new* for long.',
         body: 'We are a new church, now worshiping in person every Sunday in Vineland. No crowd to get lost in, nothing to sign. What there is: contemporary worship with Church of God in Christ roots, a group that is still small enough to know your name, and a pastor who will learn it.',
         textLink: cta('Plan your visit', '/visit'),
       },
       {
-        _type: 'cardGrid', eyebrow: 'This week', tone: 'tint', numbered: true,
+        _type: 'cardGrid', tone: 'tint', numbered: true,
         heading: 'Three ways to gather *this week*',
         cards: keyed([
           { title: 'Sunday in person', text: 'Sunday School at 10:00 AM and Morning Worship at 11:00 AM at the Ramada in Vineland, NJ.', link: cta('Plan your visit', '/visit') },
@@ -177,15 +177,15 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
         ]),
       },
       {
-        _type: 'gatheringBand', gatheringKey: 'sunday', eyebrow: 'Every week', anchor: 'sunday',
+        _type: 'gatheringBand', gatheringKey: 'sunday', anchor: 'sunday',
         heading: 'Worship with us, every *Sunday.*',
         body: 'Live and in person in Vineland. Open to everyone, whether you have been in church for thirty years or have never walked into one. Come as you are.',
       },
-      { _type: 'pastorBlock', eyebrow: 'Our pastor', tone: 'white', anchor: 'pastor' },
+      { _type: 'pastorBlock', tone: 'white', anchor: 'pastor' },
       creed,
       foundation,
       {
-        _type: 'formBlock', kind: 'updates', eyebrow: 'Stay in the loop', tone: 'sunken', anchor: 'updates',
+        _type: 'formBlock', kind: 'updates', tone: 'sunken', anchor: 'updates',
         heading: 'Stay close to what comes *next.*',
         body: 'Leave your name and we will keep you up to date on services, Bible Study, prayer and how to get involved. No spam, and you can unsubscribe any time.',
       },
@@ -198,18 +198,18 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     heroHeadline: 'You are welcome *exactly* as you are.',
     heroSubheadline: 'Here is everything you need for your first Sunday at New Direction.',
   }, [
-    { _type: 'gatheringBand', gatheringKey: 'sunday', eyebrow: 'Every Sunday', heading: 'Live and in *person.*', body: 'Sunday School starts at 10:00 AM and Morning Worship starts at 11:00 AM. Come for one or stay for both.' },
+    { _type: 'gatheringBand', gatheringKey: 'sunday', heading: 'Live and in *person.*', body: 'Sunday School starts at 10:00 AM and Morning Worship starts at 11:00 AM. Come for one or stay for both.' },
     {
-      _type: 'cardGrid', eyebrow: 'What to expect', tone: 'tint', numbered: true, heading: 'Your first *Sunday*',
+      _type: 'cardGrid', tone: 'tint', numbered: true, heading: 'Your first *Sunday*',
       cards: keyed([
         { title: 'Find the ballroom', text: 'We meet in the Omni Ballroom at the Ramada by Wyndham, on the left side of the hotel behind IHOP.' },
         { title: 'Sunday School, 10:00 AM', text: 'Classes for every stage: Elementary, Secondary, College and Adult.' },
         { title: 'Morning Worship, 11:00 AM', text: 'Our worship is contemporary and our roots are in the Church of God in Christ. Both are true at the same time.' },
       ]),
     },
-    { _type: 'mapBlock', eyebrow: 'Where we meet', heading: 'Find us in *Vineland*', tone: 'white', anchor: 'directions' },
+    { _type: 'mapBlock', heading: 'Find us in *Vineland*', tone: 'white', anchor: 'directions' },
     {
-      _type: 'cardGrid', eyebrow: 'During the week', tone: 'sunken', numbered: false, heading: 'Not free on Sunday?',
+      _type: 'cardGrid', tone: 'sunken', numbered: false, heading: 'Not free on Sunday?',
       cards: keyed([
         { title: 'Online Bible Study', text: 'Wednesdays at 7:00 PM on Zoom.', link: cta('Join Bible Study', '/bible-study') },
         { title: 'Prayer Line', text: 'Thursdays at 8:00 PM by phone.', link: cta('Get the number', '/prayer-line') },
@@ -222,9 +222,9 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     heroHeadline: 'Online Bible Study, every *Wednesday.*',
     heroSubheadline: 'Join us each Wednesday as we study God’s Word together and strengthen our walk with Christ.',
   }, [
-    { _type: 'gatheringBand', gatheringKey: 'bibleStudy', eyebrow: 'Every week', heading: 'Open your laptop and *join in.*', body: 'Open to everyone, whether you have read the Bible for thirty years or have never opened one. Come with a question. Leave with a few more.' },
+    { _type: 'gatheringBand', gatheringKey: 'bibleStudy', heading: 'Open your laptop and *join in.*', body: 'Open to everyone, whether you have read the Bible for thirty years or have never opened one. Come with a question. Leave with a few more.' },
     {
-      _type: 'cardGrid', eyebrow: 'What to expect', tone: 'tint', numbered: true, heading: 'What you will *find here*',
+      _type: 'cardGrid', tone: 'tint', numbered: true, heading: 'What you will *find here*',
       cards: keyed([
         { title: 'Practical teaching', text: 'Bible teaching and discussion you can use.' },
         { title: 'Everyday encouragement', text: 'Encouragement for everyday living.' },
@@ -233,8 +233,8 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
         { title: 'Room for questions', text: 'Opportunities to ask questions and grow in faith.' },
       ]),
     },
-    { _type: 'verseBlock', eyebrow: 'God’s Word', quote: 'Your word is a lamp to my feet and a light to my path.', cite: 'Psalm 119:105', tone: 'white' },
-    { _type: 'textBlock', eyebrow: 'Everyone is welcome', tone: 'cream', heading: 'Study to show yourself *approved.*', body: '2 Timothy 2:15', button: cta('Join Bible Study', ZOOM) },
+    { _type: 'verseBlock', quote: 'Your word is a lamp to my feet and a light to my path.', cite: 'Psalm 119:105', tone: 'white' },
+    { _type: 'textBlock', tone: 'cream', heading: 'Study to show yourself *approved.*', body: '2 Timothy 2:15', button: cta('Join Bible Study', ZOOM) },
   ], 'Join New Direction C.O.G.I.C for Online Bible Study every Wednesday at 7:00 PM on Zoom, led by Elder Paul S. Harden, Sr. Everyone is welcome.'),
 
   page('prayer-line', 'Prayer Line', {
@@ -242,9 +242,9 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     heroHeadline: 'Where prayer changes *things.*',
     heroSubheadline: 'Join us every Thursday evening as we come together in prayer, faith and unity.',
   }, [
-    { _type: 'gatheringBand', gatheringKey: 'prayerLine', eyebrow: 'Every Thursday', heading: 'Call in from *anywhere.*', body: 'All you need is a phone. Dial the number, enter the access code, and pray with us.' },
+    { _type: 'gatheringBand', gatheringKey: 'prayerLine', heading: 'Call in from *anywhere.*', body: 'All you need is a phone. Dial the number, enter the access code, and pray with us.' },
     {
-      _type: 'cardGrid', eyebrow: 'Who it is for', tone: 'tint', numbered: false, heading: 'Is this *for you?*',
+      _type: 'cardGrid', tone: 'tint', numbered: false, heading: 'Is this *for you?*',
       cards: keyed([
         { title: 'Need encouragement?' },
         { title: 'Seeking God’s direction?' },
@@ -253,13 +253,13 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
       ]),
     },
     {
-      _type: 'cardGrid', eyebrow: 'Come expecting', tone: 'cream', numbered: false, heading: 'What we are *believing for*',
+      _type: 'cardGrid', tone: 'cream', numbered: false, heading: 'What we are *believing for*',
       cards: keyed([
         { title: 'Inspiration' }, { title: 'Healing prayer' }, { title: 'Encouragement' }, { title: 'Spiritual growth' }, { title: 'A closer walk with God' },
       ]),
     },
-    { _type: 'verseBlock', eyebrow: 'Our confidence', quote: 'The effectual fervent prayer of a righteous person availeth much.', cite: 'James 5:16', tone: 'white' },
-    { _type: 'textBlock', eyebrow: 'All are welcome', tone: 'sunken', heading: 'Bring someone *with you.*', body: 'Invite your family, friends, neighbors and coworkers.' },
+    { _type: 'verseBlock', quote: 'The effectual fervent prayer of a righteous person availeth much.', cite: 'James 5:16', tone: 'white' },
+    { _type: 'textBlock', tone: 'sunken', heading: 'Bring someone *with you.*', body: 'Invite your family, friends, neighbors and coworkers.' },
   ], 'Call the New Direction C.O.G.I.C Prayer Line every Thursday at 8:00 PM. Dial (605) 313-9874, access code 1636586. All are welcome.'),
 
   page('about', 'About', {
@@ -268,13 +268,13 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     heroSubheadline: 'New Direction C.O.G.I.C is a contemporary church with Church of God in Christ roots.',
   }, [
     {
-      _type: 'textBlock', eyebrow: 'Our story', tone: 'white',
+      _type: 'textBlock', tone: 'white',
       heading: 'Moving forward in *faith.*',
       body: 'Our goal is spiritual service and development, for each person individually and for the community together.\n\nWe started with a Bible study on Zoom, and today we worship in person every Sunday in Vineland, New Jersey. We are still small enough to know your name, and we are just getting started.',
       textLink: cta('Plan your visit', '/visit'),
     },
     {
-      _type: 'cardGrid', eyebrow: 'What guides us', tone: 'tint', numbered: true, heading: 'People, purpose, *progress*',
+      _type: 'cardGrid', tone: 'tint', numbered: true, heading: 'People, purpose, *progress*',
       cards: keyed([
         { title: 'People', text: 'Whatever brought you here, you are welcome exactly as you are.' },
         { title: 'Purpose', text: 'We want to see every person reach their fullest potential, spiritually and naturally.' },
@@ -282,7 +282,7 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
       ]),
     },
     creed,
-    { _type: 'pastorBlock', eyebrow: 'Our pastor', tone: 'white' },
+    { _type: 'pastorBlock', tone: 'white' },
     foundation,
   ], 'New Direction C.O.G.I.C is a contemporary church with Church of God in Christ roots, serving Vineland, NJ through worship, study and service.'),
 
@@ -290,8 +290,8 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     heroKicker: 'Our pastor',
     heroHeadline: 'Meet Elder *Harden.*',
   }, [
-    { _type: 'pastorBlock', eyebrow: 'Pastor', tone: 'white', showFullBio: true },
-    { _type: 'textBlock', eyebrow: 'Come and meet him', tone: 'sunken', heading: 'We would love to *meet you.*', button: cta('Plan your visit', '/visit') },
+    { _type: 'pastorBlock', tone: 'white', showFullBio: true },
+    { _type: 'textBlock', tone: 'sunken', heading: 'We would love to *meet you.*', button: cta('Plan your visit', '/visit') },
   ], 'Meet Elder Dr. Paul S. Harden, Sr., pastor of New Direction C.O.G.I.C in Vineland, NJ.'),
 
   page('give', 'Give', {
@@ -300,7 +300,7 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     heroSubheadline: 'Your gift helps launch and grow New Direction C.O.G.I.C.',
   }, [
     {
-      _type: 'textBlock', eyebrow: 'Give online', tone: 'tint', heading: 'Give *online*',
+      _type: 'textBlock', tone: 'tint', heading: 'Give *online*',
       body: 'We use Zeffy for online giving. Thank you for standing with us.',
       button: { ...cta('Give online', GIVE), openInNewTab: true },
     },
@@ -312,14 +312,14 @@ He is married to Sister Kedra Harden and together they have two daughters, Dajan
     heroSubheadline: 'Ask a question, tell us you are coming, or send us a prayer request.',
   }, [
     {
-      _type: 'cardGrid', eyebrow: 'Reach us', tone: 'tint', numbered: false, heading: 'Three ways to *connect*',
+      _type: 'cardGrid', tone: 'tint', numbered: false, heading: 'Three ways to *connect*',
       cards: keyed([
         { title: 'Email us', text: 'thenewdirectioncogic@gmail.com', link: cta('Send an email', 'mailto:thenewdirectioncogic@gmail.com') },
         { title: 'Visit on Sunday', text: `${VENUE}, ${ADDRESS}`, link: cta('Plan your visit', '/visit') },
         { title: 'Call the prayer line', text: 'Thursdays at 8:00 PM. Dial (605) 313-9874, access code 1636586.', link: cta('Prayer Line details', '/prayer-line') },
       ]),
     },
-    { _type: 'formBlock', kind: 'contact', eyebrow: 'Send a message', tone: 'sunken', heading: 'How can we *help?*' },
+    { _type: 'formBlock', kind: 'contact', tone: 'sunken', heading: 'How can we *help?*' },
   ], 'Contact New Direction C.O.G.I.C in Vineland, NJ with a question, a prayer request, or to plan your visit.'),
 ]
 

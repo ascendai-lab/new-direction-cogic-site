@@ -47,7 +47,6 @@ export interface Card { _key?: string; title?: string; text?: string; link?: Cta
 export interface Section {
   _key: string
   _type: string
-  eyebrow?: string
   heading?: string
   body?: string
   tone?: string
@@ -56,7 +55,7 @@ export interface Section {
   textLink?: Cta
   numbered?: boolean
   cards?: Card[]
-  gatheringKey?: string
+  gatheringKey?: Gathering['key']
   showFullBio?: boolean
   quote?: string
   cite?: string
