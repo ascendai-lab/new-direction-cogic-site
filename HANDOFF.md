@@ -117,15 +117,16 @@ Done:
 - The site is live, with SEO, llms.txt, structured data, Search Console and GA4.
 - The forms work and were tested live.
 - All three social profiles are set up (photo, cover, bio, links), and the footer shows the social icons.
-- The Bible study flyer is posted on Facebook and Instagram.
+- Posted on Facebook and Instagram: the Bible study flyer (11-11) and a Prayer Line graphic (11-12). The Prayer Line graphic was made with PIL from the site's details and saved as `../New-Direction-COGIC/social/posts/prayer-line-flyer.jpg`. Its source script was a scratch file and wasn't kept.
 
 ## Next steps
 
 1. **Contact lost form submissions.** At least one homepage signup (Claudia Finney) was lost between 2026-11-08 and 11-11. Paul should reach out.
 2. **This week's posts.** For each one, get the caption approved, then post to both Facebook and Instagram:
    - the reel, once Mark sends the video file (also upload it to YouTube as a Short if it's vertical and under 3 minutes)
-   - `online-church-flyer.jpg` on 2026-11-12
    - `sunday-worship-flyer.jpg` on 2026-11-14 (Saturday)
+   - `online-church-flyer.jpg`: no date yet. Ask Mark (Saturday with the Sunday flyer is likely)
+   - Weekly rhythm to suggest: Bible study on Wednesday, Prayer Line on Thursday, Sunday flyer on Saturday. The graphics are reusable as-is, but the captions say "TONIGHT", so post them on the day
 3. **Connect Facebook and Instagram in Meta Business Suite** so one post goes to both. Make Mark an admin of the page so posting doesn't need Paul's login.
 4. **Instagram website link:** add newdirectioncogic.com to the bio. This only works in the phone app.
 5. **n8n webhook (optional):** set `N8N_CONTACT_WEBHOOK_URL`, redeploy, then retire the old-project form route.
