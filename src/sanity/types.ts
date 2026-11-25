@@ -21,6 +21,7 @@ export interface Settings {
   facebook?: string
   instagram?: string
   youtube?: string
+  tiktok?: string
   phone?: string
   address?: string
   directions?: string

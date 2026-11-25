@@ -95,6 +95,12 @@ export const siteSettings = defineType({
       type: 'url',
       group: 'social',
     }),
+    defineField({
+      name: 'tiktok',
+      title: 'TikTok URL',
+      type: 'url',
+      group: 'social',
+    }),
 
     // ─── Footer ────────────────────────────────────────────────────
     defineField({

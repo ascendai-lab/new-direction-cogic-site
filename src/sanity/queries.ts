@@ -57,6 +57,7 @@ export const siteSettingsQuery = groq`
     instagram,
     linkedin,
     youtube,
+    tiktok,
     footerTagline,
     copyrightName,
     googleAnalyticsId,
