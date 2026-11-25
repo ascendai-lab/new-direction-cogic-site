@@ -61,6 +61,7 @@ const docs = [
     facebook: 'https://www.facebook.com/thenewdirectioncogic',
     instagram: 'https://www.instagram.com/thenewdirectioncogic/',
     youtube: 'https://www.youtube.com/@thenewdirectioncogic',
+    tiktok: 'https://www.tiktok.com/@thenewdirectionco',
     locationName: VENUE,
     directions: 'Take Route 55 to Exit 32A. We meet in the Omni Ballroom at the Ramada, on the left side of the hotel behind IHOP.',
     donateUrl: GIVE,

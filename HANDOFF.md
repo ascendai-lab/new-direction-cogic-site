@@ -100,7 +100,7 @@ NETLIFY=true netlify deploy --build --prod   # deploy to production
 - **No Google Business Profile or Bing Webmaster Tools** until the church owns a building.
 - **Paul gets no Studio or Netlify access.** Mark manages all content.
 - **SSR stays on.** Don't switch to static output or `useCdn: true`, because visual editing and live content break.
-- **Social icons** use each platform's real colors (Facebook blue, Instagram gradient, YouTube red), not the site's brand colors.
+- **Social icons** use each platform's real colors (Facebook blue, Instagram gradient, YouTube red, TikTok black with cyan and red), not the site's brand colors.
 - **Account work** (Facebook, Instagram, YouTube, Google) is done in Mark's Ascend AI Chrome profile ("Browser 2").
   - Claude never types passwords and never switches Facebook logins. Mark does both.
   - Every public post needs Mark's approval of the caption first.
