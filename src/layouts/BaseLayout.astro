@@ -82,6 +82,20 @@ const jsonLd = {
     { '@type': 'WebPage', url: canonical, name: pageTitle, description: pageDesc, isPartOf: { '@id': `${home}#website` } },
   ],
 }
+
+// Prefetch same-site pages on hover or pointer-down. Studio, API and text endpoints are left out.
+const speculationRules = {
+  prefetch: [{
+    where: {
+      and: [
+        { href_matches: '/*' },
+        { not: { href_matches: ['/studio', '/studio/*', '/api/*', '/*.txt', '/*.xml', '/*\\?*'] } },
+        { not: { selector_matches: '[target=_blank], [rel~=nofollow], [download]' } },
+      ],
+    },
+    eagerness: 'moderate',
+  }],
+}
 ---
 
 <!doctype html>
@@ -89,6 +103,7 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="text-scale" content="scale" />
     <title>{pageTitle}</title>
     {pageDesc && <meta name="description" content={pageDesc} />}
     {hideFromSearch && <meta name="robots" content="noindex, nofollow" />}
@@ -108,37 +123,39 @@ const jsonLd = {
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" />
+    <link rel="preload" href="/fonts/google-sans-flex-latin.woff2" as="font" type="font/woff2" crossorigin />
     <script is:inline>document.documentElement.classList.add('js')</script>
+    <script is:inline>
+      // Cross-document view transitions: keep the header still instead of replaying its entrance.
+      addEventListener('pagereveal', (e) => { if (e.viewTransition) document.documentElement.classList.add('vt-nav') })
+    </script>
+    <script type="speculationrules" is:inline set:html={JSON.stringify(speculationRules)} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-
-    {gaId && (
-      <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
-        <script is:inline define:vars={{ gaId }}>
-          window.dataLayer = window.dataLayer || []
-          function gtag() { dataLayer.push(arguments) }
-          gtag('js', new Date())
-          gtag('config', gaId)
-        </script>
-      </>
-    )}
   </head>
 
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <div class="nav-scrim" id="nav-scrim"></div>
 
     <div class="sheet">
       <Nav nav={nav} />
-      <main id="main">
+      <main id="main" tabindex="-1">
         <slot />
       </main>
     </div>
 
     <Footer settings={settings} />
     <script>import '../scripts/site.ts'</script>
+
+    {gaId && (
+      <>
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || []
+          function gtag() { dataLayer.push(arguments) }
+          gtag('js', new Date())
+          gtag('config', gaId)
+        </script>
+        <script async fetchpriority="low" src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+      </>
+    )}
   </body>
 </html>

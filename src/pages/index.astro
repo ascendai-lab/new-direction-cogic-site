@@ -12,7 +12,11 @@ const [page, settings] = await Promise.all([
   client.fetch<Settings>(siteSettingsQuery),
 ])
 
-const heroImage = page?.heroImage?.asset?.url ? `${page.heroImage.asset.url}?w=1900&auto=format` : '/img/hero-community.jpg'
+const heroUrl: string | undefined = page?.heroImage?.asset?.url
+const heroImage = heroUrl ? `${heroUrl}?w=1900&auto=format` : '/img/hero-community.jpg'
+// Phones crop the 3:2 photo to 4:5, so they need roughly 1.25x the viewport width.
+const heroSrcset = heroUrl ? [640, 960, 1280, 1600, 1900].map((w) => `${heroUrl}?w=${w}&auto=format ${w}w`).join(', ') : undefined
+const heroSizes = '(max-width: 760px) 125vw, (min-width: 1440px) 1300px, 92vw'
 const slots = JSON.stringify(settings?.gatherings?.map(({ name, weekday, startTime, durationMinutes }) => ({ name, weekday, startTime, durationMinutes })) ?? [])
 const ribbon: string[] = page?.ribbon ?? []
 ---
@@ -29,7 +33,15 @@ const ribbon: string[] = page?.ribbon ?? []
       <h1 class="display center rise" set:html={emphasize(page?.heroHeadline)} />
     </div>
     <figure class="hero-figure rise">
-      <img src={heroImage} alt={page?.heroImageAlt ?? ''} width="1900" height="1266" fetchpriority="high" />
+      {heroSrcset
+        ? <img src={heroImage} srcset={heroSrcset} sizes={heroSizes} alt={page?.heroImageAlt ?? ''} width="1900" height="1266" fetchpriority="high" />
+        : (
+          <picture>
+            <source srcset="/img/hero-community.avif" type="image/avif" />
+            <source srcset="/img/hero-community.webp" type="image/webp" />
+            <img src={heroImage} alt={page?.heroImageAlt ?? ''} width="1900" height="1266" fetchpriority="high" />
+          </picture>
+        )}
       <a class="next-chip" href="/visit" id="next-chip" data-gatherings={slots}>
         <span class="dot" aria-hidden="true"></span><span id="chip-text">{settings?.gatherings?.[0]?.timeLabel}</span>
       </a>
@@ -44,14 +56,18 @@ const ribbon: string[] = page?.ribbon ?? []
         )}
       </figcaption>
     </figure>
-    <div style="height:clamp(28px,4vw,56px)"></div>
+    <div class="hero-spacer"></div>
   </section>
 
   {ribbon.length > 0 && (
-    <div class="ribbon" aria-hidden="true">
-      <div class="ribbon-track">
+    <div class="ribbon" id="ribbon">
+      <div class="ribbon-track" aria-hidden="true">
         {[...ribbon, ...ribbon].map((item) => <span set:html={emphasize(item)} />)}
       </div>
+      <button type="button" class="ribbon-toggle" id="ribbon-toggle" aria-pressed="false" aria-label="Pause the moving banner">
+        <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.5" height="14" rx="1" /><rect x="13.5" y="5" width="3.5" height="14" rx="1" /></svg>
+        <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>
+      </button>
     </div>
   )}
 

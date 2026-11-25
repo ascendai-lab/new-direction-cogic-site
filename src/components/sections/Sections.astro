@@ -8,7 +8,9 @@ const { sections = [], settings } = Astro.props
 
 const band = (s: Section, extra = '') => `band band--${s.tone ?? 'white'} pad ${extra}`.trim()
 const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${settings?.locationName ?? ''} ${settings?.address ?? ''}`)}`
-const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.asset.url}?w=720&auto=format` : '/img/pastor-solid-blue.png'
+const pastorUrl: string | undefined = settings?.pastorPhoto?.asset?.url
+const pastorPhoto = pastorUrl ? `${pastorUrl}?w=720&auto=format` : '/img/pastor-solid-blue.png'
+const pastorSrcset = pastorUrl ? [420, 720].map((w) => `${pastorUrl}?w=${w}&auto=format ${w}w`).join(', ') : undefined
 ---
 
 {sections.map((s) => {
@@ -42,12 +44,12 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
       </div>
       <div class={`cards${[2, 4].includes(s.cards?.length ?? 0) ? ' cards--two' : ''}`}>
         {s.cards?.map((c, i) => (
-          <div class="card reveal">
-            {s.numbered !== false && <span class="num">{String(i + 1).padStart(2, '0')}</span>}
+          <article class="card reveal">
+            {s.numbered !== false && <span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>}
             <h3>{c.title}</h3>
             {c.text && <p>{c.text}</p>}
             {c.link && <a class="tlink" href={c.link.href} {...linkAttrs(c.link.href)}>{c.link.label} <span class="arw" aria-hidden="true">&rarr;</span></a>}
-          </div>
+          </article>
         ))}
       </div>
     </section>
@@ -81,18 +83,19 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
               <div><b data-u="m">&ndash;</b><small>Min</small></div>
               <div><b data-u="s">&ndash;</b><small>Sec</small></div>
             </div>
-            <dl style="margin:0">
+            <dl class="detail-list">
               {g.rows?.map((r) => (
                 <div class="detail-row">
                   <dt>{r.label}</dt>
                   <dd>
                     {r.copy
-                      ? <button type="button" class="copy" data-copy={r.copy}>{r.value} <span class="copy-label">Copy</span></button>
+                      ? <button type="button" class="copy" data-copy={r.copy} data-what={r.label} aria-label={`Copy ${r.label}: ${r.value}`}>{r.value} <span class="copy-label" aria-hidden="true">Copy</span></button>
                       : r.href ? <a href={r.href} {...linkAttrs(r.href)}>{r.value}</a> : r.value}
                   </dd>
                 </div>
               ))}
             </dl>
+            <p class="vh" role="status" data-copy-status></p>
             <div class="card-actions">
               {g.action && (
                 <a class="btn btn--primary" href={g.action.href} {...linkAttrs(g.action.href)}>
@@ -117,9 +120,17 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
     )
     return (
       <section class={band(s)} id={id}>
-        <div class="split split--portrait" style={s.showFullBio ? 'align-items:start' : undefined}>
+        <div class={`split split--portrait${s.showFullBio ? ' split--top' : ''}`}>
           <div class="portrait reveal">
-            <img src={pastorPhoto} alt={settings?.pastorName} width="720" height="960" loading="lazy" />
+            {pastorSrcset
+              ? <img src={pastorPhoto} srcset={pastorSrcset} sizes="(min-width: 900px) 420px, 92vw" alt={settings?.pastorName} width="720" height="960" loading="lazy" />
+              : (
+                <picture>
+                  <source srcset="/img/pastor-solid-blue.avif" type="image/avif" />
+                  <source srcset="/img/pastor-solid-blue.webp" type="image/webp" />
+                  <img src={pastorPhoto} alt={settings?.pastorName} width="720" height="960" loading="lazy" />
+                </picture>
+              )}
           </div>
           <div class="stagger">
             {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
@@ -149,8 +160,10 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
     <section class={band(s, 'center')}>
       <div class="stagger">
         {s.eyebrow && <span class="pill">{s.eyebrow}</span>}
-        <p class="verse">&ldquo;{s.quote}&rdquo;</p>
-        <p class="verse-cite">{s.cite}</p>
+        <figure class="verse-figure">
+          <blockquote class="verse"><p>&ldquo;{s.quote}&rdquo;</p></blockquote>
+          {s.cite && <figcaption class="verse-cite">{s.cite}</figcaption>}
+        </figure>
       </div>
     </section>
   )
@@ -165,8 +178,10 @@ const pastorPhoto = settings?.pastorPhoto?.asset?.url ? `${settings.pastorPhoto.
           {settings?.directions && <p class="lead mt5">{settings.directions}</p>}
           <p class="mt5"><a class="btn btn--primary" href={mapUrl} target="_blank" rel="noopener">Get directions <span class="arw" aria-hidden="true">&rarr;</span></a></p>
         </div>
-        <div class="map-frame reveal">
-          <iframe src={`${mapUrl}&output=embed`} title={`Map to ${settings?.locationName}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="map-frame map-facade reveal" data-map-src={`${mapUrl}&output=embed`} data-map-title={`Map to ${settings?.locationName}`}>
+          <svg class="map-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg>
+          <p class="map-facade-text">The map loads from Google Maps when you ask for it.</p>
+          <button type="button" class="btn btn--outline map-load">Show the map</button>
         </div>
       </div>
     </section>

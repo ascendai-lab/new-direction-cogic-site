@@ -47,7 +47,13 @@ Browser ──> Netlify project "ndcogic-full-site-preview" (Astro 5 SSR + React
 - `src/components/layout/Footer.astro`: footer, including the brand-color social icons (22px, inline SVG)
 - `src/components/sections/Sections.astro`: renders the Sanity page sections (textBlock, cardGrid, gatheringBand, pastorBlock, creedBlock, verseBlock and others)
 - `src/pages/api/contact.ts`: form endpoint (Zod validation, honeypot `company`, 60s per-IP rate limit)
-- `src/lib/schedule.ts`: "next gathering" countdown logic. Check it with `node src/lib/schedule.check.ts`
+- `src/lib/schedule.ts`: "next gathering" countdown logic, DST-safe (Eastern wall clock via `Intl`). Check it with `node src/lib/schedule.check.ts`
+- `src/scripts/site.ts`: the mobile menu (a native `popover`), marquee pause button, copy buttons, map that loads on click, scroll reveal fallback, countdowns
+- `public/fonts/`: Google Sans Flex and Instrument Serif, self-hosted (no Google Fonts request). `global.css` holds the `@font-face` rules and a metric-matched Arial fallback
+
+### Modern Web Guidance (2026-11-25)
+
+The site follows Chrome's Modern Web Guidance: text-scale meta with rem type, speculation-rules prefetch (never `/studio` or `/api`), cross-document view transitions, per-effect reduced motion, forced-colors fixes, native-constraint form validation with `:user-invalid`, and a scroll-state sticky header. All custom CSS sits in `@layer site`, between Tailwind's theme and utilities layers. Newer CSS features are progressive: older browsers get the previous behavior.
 - `src/lib/seo.ts`: `indexingAllowed()` reads `ALLOW_INDEXING` at request time
 - `scripts/seed.mjs`: seeds or reseeds Sanity content (meta titles, settings, socials, GA ID)
 - `public/__forms.html`: form definitions for Netlify Forms. **Do not delete**

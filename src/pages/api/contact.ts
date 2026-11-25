@@ -35,6 +35,9 @@ function isRateLimited(ip: string): boolean {
 }
 
 export const POST: APIRoute = async ({ request, site }) => {
+  // Fetch Metadata: browsers mark requests from other sites. Ours come from this site's own pages.
+  if (request.headers.get('sec-fetch-site') === 'cross-site') return json({ error: 'Cross-site request refused.' }, 403)
+
   let body: unknown
   try {
     body = await request.json()
@@ -69,6 +72,7 @@ export const POST: APIRoute = async ({ request, site }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(15_000),
       })
       if (!res.ok) throw new Error(`n8n returned ${res.status}`)
     } else if (import.meta.env.DEV) {
@@ -84,6 +88,7 @@ export const POST: APIRoute = async ({ request, site }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: form.toString(),
+        signal: AbortSignal.timeout(15_000),
       })
       if (!res.ok) throw new Error(`Netlify Forms returned ${res.status}`)
     }
