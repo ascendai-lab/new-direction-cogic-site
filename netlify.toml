@@ -13,7 +13,16 @@
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "frame-ancestors 'self' https://*.sanity.studio https://sanity.studio"
+    Strict-Transport-Security = "max-age=31536000"
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    # Keep frame-ancestors exactly as is (Sanity visual editing). Never add X-Frame-Options.
+    # object-src and base-uri close two script-injection routes without touching normal scripts.
+    Content-Security-Policy = "frame-ancestors 'self' https://*.sanity.studio https://sanity.studio; object-src 'none'; base-uri 'self'"
+
+# Self-hosted fonts and converted images never change in place, so let browsers keep them.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

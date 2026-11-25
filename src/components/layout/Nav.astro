@@ -26,21 +26,21 @@ const logo = nav?.logo?.asset?.url ? `${nav.logo.asset.url}?w=400&auto=format` :
     <nav class="nav-inline" aria-label="Main">
       {nav?.links?.map((l) => <a href={l.href} aria-current={current === l.href ? 'page' : undefined}>{l.label}</a>)}
     </nav>
-    <div class="header-actions" style="display:flex;gap:12px;align-items:center">
+    <div class="header-actions">
       {nav?.ctaButton && <a class="btn btn--donate btn--sm header-donate" href={nav.ctaButton.href}>{nav.ctaButton.label}</a>}
       {nav?.secondaryButton && (
         <a class="btn btn--navy btn--sm header-updates" href={nav.secondaryButton.href}>
           {nav.secondaryButton.label} <span class="arw" aria-hidden="true">&rarr;</span>
         </a>
       )}
-      <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+      <button type="button" class="menu-btn" id="menu-btn" popovertarget="nav" aria-label="Menu">
         <span class="bars" aria-hidden="true"><span></span><span></span></span>
       </button>
     </div>
   </div>
-  <nav class="nav" id="nav" data-open="false" aria-label="Mobile">
+  <nav class="nav" id="nav" popover aria-label="Main">
     <ul>
-      {nav?.links?.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      {nav?.links?.map((l) => <li><a href={l.href} aria-current={current === l.href ? 'page' : undefined}>{l.label}</a></li>)}
       {nav?.secondaryButton && <li><a href={nav.secondaryButton.href}>{nav.secondaryButton.label}</a></li>}
       {nav?.mobileButton && (
         <li class="nav-cta"><a class="btn btn--primary" href={nav.mobileButton.href} {...linkAttrs(nav.mobileButton.href)}>{nav.mobileButton.label}</a></li>
